@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "216718784987",
+    "project_id": "project-4eme-annee",
+    "storage_bucket": "project-4eme-annee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216718784987:android:0da16b7e3a1e829c214ffe",
+        "android_client_info": {
+          "package_name": "com.yorastd.repport_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216718784987-8dvts5cvet4bsqjc7kulecnehq8t21cp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCku8x_roXZ7NBvfgfoieNRNMcxPZs5Qis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216718784987-8dvts5cvet4bsqjc7kulecnehq8t21cp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

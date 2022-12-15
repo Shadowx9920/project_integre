@@ -1,0 +1,36 @@
+name: project_integre
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.0-444.0.dev <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following are developemnt dependencies
+  get: ^4.6.5
+
+  # The following is for database management
+  firebase_core: ^2.4.0
+  firebase_auth: ^4.2.0
+
+  # The following is for animations
+  lottie: ^2.0.0
+
+  # The following are General tools
+  email_validator: ^2.1.17
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/animations/
+    - assets/translations/
