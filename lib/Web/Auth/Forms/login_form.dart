@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../main_web_app.dart';
@@ -132,24 +133,33 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future signIn() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-    } on FirebaseAuthException catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.message!),
-        ),
-      );
+      UserCredential userC = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (context) => const Center(child: CircularProgressIndicator()),
+    // );
+    // try {
+    //   await FirebaseAuth.instance.signInWithEmailAndPassword(
+    //     email: _emailController.text.trim(),
+    //     password: _passwordController.text.trim(),
+    //   );
+    // } on FirebaseAuthException catch (e) {
+    //   Navigator.of(context).pop();
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(e.message!),
+    //     ),
+    //   );
+    // }
+    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

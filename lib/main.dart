@@ -10,6 +10,7 @@ import 'Android/main_android_app.dart';
 import 'Web/main_web_app.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     if (Platform.isAndroid || Platform.isIOS) {
       //running on android or ios device

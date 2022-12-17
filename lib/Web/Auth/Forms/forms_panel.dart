@@ -38,8 +38,7 @@ class _FormsPanelState extends State<FormsPanel> {
                 borderRadius: BorderRadius.circular(20), //ACHRAF this was 40
               ),
               //surfaceTintColor: Colors.blue.shade400,
-              color: const Color.fromARGB(
-                  255, 22, 41, 76), //ACHRAF this was nothing
+              color: Colors.blue, //ACHRAF this was nothing
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

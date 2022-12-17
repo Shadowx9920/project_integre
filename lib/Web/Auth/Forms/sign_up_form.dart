@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../main_web_app.dart';
@@ -154,24 +155,34 @@ class _SignUpFormState extends State<SignUpForm> {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) return;
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-    } on FirebaseAuthException catch (e) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.message!),
-        ),
-      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
     }
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (context) => const Center(child: CircularProgressIndicator()),
+    // );
+    // try {
+    //   await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    //     email: _emailController.text.trim(),
+    //     password: _passwordController.text.trim(),
+    //   );
+    // } on FirebaseAuthException catch (e) {
+    //   Navigator.of(context).pop();
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(e.message!),
+    //     ),
+    //   );
+    // }
+    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }
