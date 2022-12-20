@@ -16,6 +16,7 @@ dependencies:
   # The following is for database management
   firebase_core: ^2.4.0
   firebase_auth: ^4.2.0
+  mysql1: ^0.20.0
 
   # The following is for animations
   lottie: ^2.0.0
