@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'Auth/auth_check.dart';
 import 'Views/error_page.dart';
+import 'Views/main_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -20,6 +21,7 @@ class _MainWebAppState extends State<MainWebApp> {
       title: "Project Name",
       routes: {
         "/": (context) => const AuthCheck(),
+        "/Home": (context) => const MainWebPage(),
         "/404": (context) => const ErrorPage(),
       },
       initialRoute: "/",

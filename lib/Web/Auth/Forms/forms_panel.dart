@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../colors.dart';
 import 'login_form.dart';
 import 'sign_up_form.dart';
 
@@ -38,7 +39,7 @@ class _FormsPanelState extends State<FormsPanel> {
                 borderRadius: BorderRadius.circular(20), //ACHRAF this was 40
               ),
               //surfaceTintColor: Colors.blue.shade400,
-              color: Colors.blue, //ACHRAF this was nothing
+              color: WebColors.backgroundColor, //ACHRAF this was nothing
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

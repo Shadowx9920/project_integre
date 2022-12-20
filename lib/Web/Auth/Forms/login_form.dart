@@ -134,9 +134,8 @@ class _LoginFormState extends State<LoginForm> {
 
   Future signIn() async {
     try {
-      UserCredential userC = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
     } catch (e) {
       if (kDebugMode) {
         print(e);
