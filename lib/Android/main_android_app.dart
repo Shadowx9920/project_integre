@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'Auth/auth_check.dart';
 import 'Views/error_page.dart';
 import 'Views/main_android_page.dart';
+import 'Views/settings_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -26,6 +27,7 @@ class _MainAndroidAppState extends State<MainAndroidApp> {
         "/404": (context) => const ErrorPage(
               routeName: '',
             ),
+        "/Settings": (context) => const AndroidSettingsPage(),
       },
       initialRoute: "/",
       onUnknownRoute: (settings) {

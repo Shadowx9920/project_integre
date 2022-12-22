@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../../Core/colors.dart';
 
 class MainWebPage extends StatefulWidget {
   const MainWebPage({super.key});
@@ -21,15 +21,30 @@ class _MainWebPageState extends State<MainWebPage> {
         bottom: 20,
       ),
       child: Row(
-        children: const [
-          FlutterLogo(
+        children: [
+          const FlutterLogo(
             size: 20,
           ),
-          Spacer(),
-          HeaderButton(text: "Home"),
-          HeaderButton(text: "Settings"),
-          HeaderButton(text: "About"),
-          HeaderButton(text: "Contact"),
+          const Spacer(),
+          HeaderButton(
+            text: "Home",
+            onPressed: () {},
+          ),
+          HeaderButton(
+            text: "Settings",
+            onPressed: () {},
+          ),
+          HeaderButton(
+            text: "About",
+            onPressed: () {},
+          ),
+          HeaderButton(
+            text: "Settings",
+            onPressed: () {
+              debugPrint("testtest");
+              Navigator.pushNamed(context, "/Settings");
+            },
+          ),
         ],
       ),
     );
@@ -41,10 +56,47 @@ class _MainWebPageState extends State<MainWebPage> {
       width: double.infinity,
       height: size.height * 0.4,
       child: Row(
-        children: const [
-          Expanded(child: Placeholder()),
-          Expanded(child: Placeholder()),
-          Expanded(child: Placeholder()),
+        children: [
+          Expanded(
+              child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Contact Us",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.home)),
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.home)),
+                      IconButton(
+                          onPressed: () {}, icon: const Icon(Icons.home)),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          )),
+          const Expanded(
+              child: Center(
+            child: FlutterLogo(
+              size: 50,
+            ),
+          )),
+          Expanded(
+              child: Stack(
+            children: [],
+          )),
         ],
       ),
     );
@@ -74,9 +126,10 @@ class _MainWebPageState extends State<MainWebPage> {
 }
 
 class HeaderButton extends StatefulWidget {
-  const HeaderButton({super.key, required this.text});
+  const HeaderButton({super.key, required this.text, required this.onPressed});
 
   final String text;
+  final VoidCallback onPressed;
   @override
   State<HeaderButton> createState() => _HeaderButtonState();
 }
@@ -109,23 +162,26 @@ class _HeaderButtonState extends State<HeaderButton>
           left: 12.0,
           right: 12.0,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(widget.text),
-            const Spacer(),
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Container(
-                  height: 2,
-                  width: _controller.value * 40,
-                  color: Colors.black,
-                );
-              },
-            ),
-          ],
+        child: GestureDetector(
+          onTap: widget.onPressed,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(widget.text),
+              const Spacer(),
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Container(
+                    height: 2,
+                    width: _controller.value * 40,
+                    color: Colors.black,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
