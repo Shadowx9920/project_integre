@@ -1,11 +1,18 @@
+import 'dart:ffi';
+
+import 'package:objectbox/objectbox.dart';
+
+@Entity()
+@Sync()
 class Compte {
+  @Id()
   int id;
   String email;
   String password;
   String status;
 
   Compte(
-      {required this.id,
+      {this.id = 0,
       required this.email,
       required this.password,
       required this.status});

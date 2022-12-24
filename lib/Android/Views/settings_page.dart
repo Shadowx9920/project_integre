@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class AndroidSettingsPage extends StatelessWidget {
@@ -6,10 +7,24 @@ class AndroidSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SettingsList(
         platform: DevicePlatform.android,
-        sections: [],
+        sections: [
+          SettingsSection(
+            title: const Text('Section'),
+            tiles: [
+              SettingsTile.switchTile(
+                title: const Text("Dark Mode"),
+                leading: const Icon(Icons.dark_mode),
+                initialValue: false,
+                onToggle: (bool value) {
+                  Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

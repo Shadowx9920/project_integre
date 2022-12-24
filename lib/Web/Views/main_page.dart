@@ -95,7 +95,7 @@ class _MainWebPageState extends State<MainWebPage> {
           )),
           Expanded(
               child: Stack(
-            children: [],
+            children: const [],
           )),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class MainAndroidPage extends StatefulWidget {
   const MainAndroidPage({super.key});
@@ -22,11 +24,14 @@ class _MainAndroidPageState extends State<MainAndroidPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        child: _pages[_selectedIndex],
+      ),
       bottomNavigationBar: CurvedNavigationBar(
         color: Colors.blue,
         backgroundColor: Colors.white,
-        buttonBackgroundColor: Colors.blue[200],
+        buttonBackgroundColor: Colors.blue[300],
         items: const <Widget>[
           Icon(Icons.home),
           Icon(Icons.list),
@@ -48,10 +53,18 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
         children: [
-          Lottie.asset("assets/animations/work.json"),
+          Padding(
+            padding: EdgeInsets.all(size.height * 0.1),
+            child: Lottie.asset(
+              "assets/animations/work.json",
+              frameRate: FrameRate(60),
+              repeat: true,
+            ),
+          ),
         ],
       ),
     );
@@ -63,6 +76,21 @@ class SettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SettingsList(
+      sections: [
+        SettingsSection(
+          tiles: [
+            SettingsTile.switchTile(
+              initialValue: true,
+              leading: const Icon(Icons.format_paint),
+              title: const Text('Dark Mode'),
+              onToggle: (value) {
+                Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+              },
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
