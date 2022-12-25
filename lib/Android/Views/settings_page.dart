@@ -8,17 +8,18 @@ class AndroidSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
       body: SettingsList(
-        platform: DevicePlatform.android,
         sections: [
           SettingsSection(
-            title: const Text('Section'),
             tiles: [
               SettingsTile.switchTile(
-                title: const Text("Dark Mode"),
-                leading: const Icon(Icons.dark_mode),
-                initialValue: false,
-                onToggle: (bool value) {
+                initialValue: true,
+                leading: const Icon(Icons.format_paint),
+                title: const Text('Dark Mode'),
+                onToggle: (value) {
                   Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
                 },
               ),
