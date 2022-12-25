@@ -2,6 +2,78 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class DBProvider {
+  static Future<bool> signInUsingEmail(String email, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        if (kDebugMode) {
+          print(value);
+        }
+      });
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> signUpUsingEmail(String email, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        if (kDebugMode) {
+          print(value);
+        }
+      });
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> signInUsingGoogle() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithPopup(GoogleAuthProvider())
+          .then((value) {
+        if (kDebugMode) {
+          print(value);
+        }
+      });
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> signUpUsingGoogle() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithPopup(GoogleAuthProvider())
+          .then((value) {
+        if (kDebugMode) {
+          print(value);
+        }
+      });
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
   static Future<bool> updateUser(
       String displayName, String email, String password) async {
     try {

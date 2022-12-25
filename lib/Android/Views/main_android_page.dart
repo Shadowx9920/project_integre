@@ -4,7 +4,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:project_integre/Core/Database/Functions/db_provider.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';

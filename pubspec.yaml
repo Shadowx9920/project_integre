@@ -30,6 +30,7 @@ dependencies:
   widget_circular_animator: ^1.0.0
   circular_profile_avatar: ^2.0.5
   image_picker: ^0.8.6
+  eva_icons_flutter: ^3.1.0
 
 dev_dependencies:
   flutter_test:

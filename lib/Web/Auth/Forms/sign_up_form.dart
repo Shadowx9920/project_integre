@@ -1,7 +1,8 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:project_integre/Core/Database/Functions/db_provider.dart';
+
+import '../../../Core/google_logo.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm(
@@ -137,10 +138,20 @@ class _SignUpFormState extends State<SignUpForm> {
                   onPressed: signUp,
                   child: const Text('Sign Up'),
                 ),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: widget.onClickSignUp,
                   child: const Text('Login'),
                 ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    DBProvider.signUpUsingGoogle();
+                  },
+                  child: const GoogleLogo(
+                    size: 20,
+                  ),
+                )
               ],
             ),
           )
@@ -153,34 +164,7 @@ class _SignUpFormState extends State<SignUpForm> {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) return;
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (context) => const Center(child: CircularProgressIndicator()),
-    // );
-    // try {
-    //   await FirebaseAuth.instance.createUserWithEmailAndPassword(
-    //     email: _emailController.text.trim(),
-    //     password: _passwordController.text.trim(),
-    //   );
-    // } on FirebaseAuthException catch (e) {
-    //   Navigator.of(context).pop();
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(e.message!),
-    //     ),
-    //   );
-    // }
-    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    DBProvider.signUpUsingEmail(
+        _emailController.text.trim(), _passwordController.text.trim());
   }
 }

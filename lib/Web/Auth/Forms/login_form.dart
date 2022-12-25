@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:project_integre/Core/Database/Functions/db_provider.dart';
+
+import '../../../Core/google_logo.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -118,10 +119,20 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: signIn,
                   child: const Text('Login'),
                 ),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: widget.onClickSignUp,
                   child: const Text('Sign Up'),
                 ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    DBProvider.signInUsingGoogle();
+                  },
+                  child: const GoogleLogo(
+                    size: 20,
+                  ),
+                )
               ],
             ),
           )
@@ -131,32 +142,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (context) => const Center(child: CircularProgressIndicator()),
-    // );
-    // try {
-    //   await FirebaseAuth.instance.signInWithEmailAndPassword(
-    //     email: _emailController.text.trim(),
-    //     password: _passwordController.text.trim(),
-    //   );
-    // } on FirebaseAuthException catch (e) {
-    //   Navigator.of(context).pop();
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(e.message!),
-    //     ),
-    //   );
-    // }
-    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    DBProvider.signInUsingEmail(
+        _emailController.text, _passwordController.text);
   }
 }
