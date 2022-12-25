@@ -16,8 +16,7 @@ dependencies:
   # The following is for database management
   firebase_core: ^2.4.0
   firebase_auth: ^4.2.0
-  objectbox: ^1.7.0
-  objectbox_sync_flutter_libs: ^1.7.0
+  cloud_firestore: ^4.3.0
 
   # The following is for animations
   lottie: ^2.0.0
@@ -36,8 +35,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  build_runner: ^2.3.3
-  objectbox_generator: ^1.7.0
 
 flutter:
   uses-material-design: true

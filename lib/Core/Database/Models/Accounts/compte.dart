@@ -1,9 +1,4 @@
-import 'package:objectbox/objectbox.dart';
-
-@Entity()
-@Sync()
 class Compte {
-  @Id()
   int id;
   String email;
   String password;

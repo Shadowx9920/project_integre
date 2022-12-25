@@ -1,14 +1,5 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:objectbox/objectbox.dart';
-
-class ObjectBox {
-  late final Store _store;
-
-  //static Future<ObjectBox> init() async {}
-}
 
 class DBProvider {
   static Future<bool> updateUser(
