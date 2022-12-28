@@ -24,7 +24,6 @@ class _MainWebAppState extends State<MainWebApp> {
         "/": (context) => const AuthCheck(),
         "/Home": (context) => const MainWebPage(),
         "/404": (context) => const ErrorPage(),
-        "/Settings": (context) => const WebSettingsPage(),
       },
       initialRoute: "/",
       onUnknownRoute: (settings) {

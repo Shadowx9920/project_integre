@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class HeaderButton extends StatefulWidget {
-  const HeaderButton({super.key, required this.text, required this.onPressed});
+  const HeaderButton(
+      {super.key,
+      required this.text,
+      required this.onPressed,
+      required this.icon});
 
   final String text;
+  final IconData icon;
   final VoidCallback onPressed;
   @override
   State<HeaderButton> createState() => _HeaderButtonState();
@@ -43,15 +48,29 @@ class _HeaderButtonState extends State<HeaderButton>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(widget.text),
+              const Spacer(),
+              Row(
+                children: [
+                  Icon(
+                    widget.icon,
+                    size: 18,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.text,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
               const Spacer(),
               AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {
                   return Container(
                     height: 2,
-                    width: _controller.value * 40,
-                    color: Colors.black,
+                    width: _controller.value * 50,
+                    color: Colors.white,
                   );
                 },
               ),

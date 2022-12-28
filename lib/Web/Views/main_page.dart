@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:settings_ui/settings_ui.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
 
 import '../../Core/Database/Functions/db_provider.dart';
@@ -20,6 +21,7 @@ class _MainWebPageState extends State<MainWebPage> {
   final List<Widget> _pages = const [
     Center(child: Text("home")),
     ProfileWidget(),
+    SettingsWidget(),
   ];
   late Widget _currentPage;
 
@@ -32,12 +34,10 @@ class _MainWebPageState extends State<MainWebPage> {
   Widget _buildHeader(Size size) {
     return Container(
       color: WebColors.mainColor,
-      height: size.height * 0.1,
+      height: size.height * 0.07,
       padding: const EdgeInsets.only(
         left: 10,
         right: 10,
-        top: 20,
-        bottom: 20,
       ),
       child: Row(
         children: [
@@ -47,6 +47,7 @@ class _MainWebPageState extends State<MainWebPage> {
           const Spacer(),
           HeaderButton(
             text: "Home",
+            icon: Icons.home,
             onPressed: () {
               setState(() {
                 _currentPage = _pages[0];
@@ -54,7 +55,8 @@ class _MainWebPageState extends State<MainWebPage> {
             },
           ),
           HeaderButton(
-            text: "profile",
+            text: "Profile",
+            icon: Icons.person,
             onPressed: () {
               setState(() {
                 _currentPage = _pages[1];
@@ -63,9 +65,11 @@ class _MainWebPageState extends State<MainWebPage> {
           ),
           HeaderButton(
             text: "Settings",
+            icon: Icons.settings,
             onPressed: () {
-              debugPrint("testtest");
-              Navigator.pushNamed(context, "/Settings");
+              setState(() {
+                _currentPage = _pages[2];
+              });
             },
           ),
         ],
@@ -77,68 +81,26 @@ class _MainWebPageState extends State<MainWebPage> {
     return Container(
       color: WebColors.secondaryColor,
       width: double.infinity,
-      height: size.height * 0.4,
+      height: size.height * 0.08,
       child: Row(
         children: [
-          Expanded(
-              child: Stack(
+          const Spacer(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Contact Us",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.facebook)),
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.email)),
-                      IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.home)),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          )),
-          const Expanded(
-              child: Center(
-            child: FlutterLogo(
-              size: 50,
-            ),
-          )),
-          Expanded(
-              child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      showAboutDialog(context: context);
-                    },
-                    child: const Text("About",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ),
+              GestureDetector(
+                onTap: () {},
+                child: const Text("Contact Us >"),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showAboutDialog(context: context);
+                },
+                child: const Text("About >"),
               ),
             ],
-          )),
+          ),
+          const SizedBox(width: 20),
         ],
       ),
     );
@@ -148,24 +110,18 @@ class _MainWebPageState extends State<MainWebPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildHeader(size),
-              SizedBox(
-                height: size.height,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 500),
-                  child: _currentPage,
-                ),
-              ),
-              _buildFooter(size),
-            ],
+      bottomNavigationBar: _buildFooter(size),
+      body: Column(
+        children: [
+          _buildHeader(size),
+          SizedBox(
+            height: size.height * 0.8,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: _currentPage,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -302,66 +258,83 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-          return Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+          return SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Row(
                 children: [
-                  WidgetCircularAnimator(
-                    innerColor: Colors.blue,
-                    outerColor: Colors.blue[300] as Color,
-                    size: size.height * 0.2,
-                    child: CircularProfileAvatar(
-                      "",
-                      cacheImage: true,
-                      radius: size.height * 0.15,
-                      backgroundColor: Colors.transparent,
-                      borderWidth: 0,
-                      borderColor: Colors.transparent,
-                      child: (snapshot.data.photoURL != null)
-                          ? Image.network(snapshot.data.photoURL)
-                          : Icon(
-                              Icons.person,
-                              size: size.height * 0.1,
-                            ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.1,
+                      right: size.width * 0.1,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  if (snapshot.data.displayName != null)
-                    Row(
-                      children: [
-                        const Text("Name: "),
-                        Text(snapshot.data.displayName!),
-                      ],
-                    ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Email: "),
-                      Text(snapshot.data.email!),
-                      const SizedBox(width: 10),
-                      (snapshot.data.emailVerified)
-                          ? const Icon(Icons.verified)
-                          : Container(),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        child: const Text("Edit Profile"),
-                        onPressed: () {
-                          _modifyDialogue(context);
-                        },
+                    child: WidgetCircularAnimator(
+                      innerColor: Colors.blue,
+                      outerColor: Colors.blue[300] as Color,
+                      size: size.height * 0.4,
+                      child: CircularProfileAvatar(
+                        "",
+                        cacheImage: true,
+                        radius: size.height * 0.35,
+                        backgroundColor: Colors.transparent,
+                        borderWidth: 0,
+                        borderColor: Colors.transparent,
+                        child: (snapshot.data.photoURL != null)
+                            ? Image.network(snapshot.data.photoURL)
+                            : Icon(
+                                Icons.person,
+                                size: size.height * 0.1,
+                              ),
                       ),
-                      const SizedBox(width: 20),
-                      ElevatedButton(
-                        child: const Text("Sign Out"),
-                        onPressed: () {
-                          FirebaseAuth.instance.signOut();
-                        },
+                    ),
+                  ),
+                  const VerticalDivider(
+                    thickness: 10,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(width: size.width * 0.1),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      Row(
+                        children: [
+                          const Text("Name: "),
+                          const SizedBox(width: 10),
+                          if (snapshot.data.displayName != null)
+                            Text(snapshot.data.displayName!),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Email: "),
+                          const SizedBox(width: 10),
+                          Text(snapshot.data.email!),
+                          const SizedBox(width: 10),
+                          (snapshot.data.emailVerified)
+                              ? const Icon(Icons.verified)
+                              : Container(),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            child: const Text("Edit Profile"),
+                            onPressed: () {
+                              _modifyDialogue(context);
+                            },
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            child: const Text("Sign Out"),
+                            onPressed: () {
+                              FirebaseAuth.instance.signOut();
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -379,6 +352,39 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           );
         }
       },
+    );
+  }
+}
+
+class SettingsWidget extends StatefulWidget {
+  const SettingsWidget({super.key});
+
+  @override
+  State<SettingsWidget> createState() => _SettingsWidgetState();
+}
+
+class _SettingsWidgetState extends State<SettingsWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return SettingsList(
+      platform: DevicePlatform.web,
+      sections: [
+        SettingsSection(
+          title: const Text('Theme'),
+          tiles: [
+            SettingsTile.switchTile(
+              title: const Text('Dark Mode'),
+              leading: const Icon(Icons.brightness_4),
+              initialValue: Get.isDarkMode,
+              onToggle: (bool value) {
+                setState(() {
+                  Get.changeTheme(value ? ThemeData.dark() : ThemeData.light());
+                });
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
