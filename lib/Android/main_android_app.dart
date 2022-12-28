@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-import 'Auth/auth_check.dart';
+import 'OnBoarding/on_boarding_service.dart';
 import 'Views/error_page.dart';
 import 'Views/main_android_page.dart';
 import 'Views/settings_page.dart';
@@ -22,7 +22,7 @@ class _MainAndroidAppState extends State<MainAndroidApp> {
       title: "Project Name",
       navigatorKey: navigatorKey,
       routes: {
-        "/": (context) => const AuthCheck(),
+        "/": (context) => const OnBoardingService(),
         "/Home": (context) => const MainAndroidPage(),
         "/404": (context) => const ErrorPage(
               routeName: '',

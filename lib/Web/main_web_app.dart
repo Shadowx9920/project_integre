@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'Auth/auth_check.dart';
 import 'Views/error_page.dart';
 import 'Views/main_page.dart';
-import 'Views/settings_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
