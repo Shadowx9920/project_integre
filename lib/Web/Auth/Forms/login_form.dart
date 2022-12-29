@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_integre/Core/Database/Functions/db_provider.dart';
+import 'package:project_integre/Core/Database/Functions/auth_controller.dart';
 
-import '../../../Core/google_logo.dart';
+import '../../../Core/Shared/google_logo.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -127,7 +127,7 @@ class _LoginFormState extends State<LoginForm> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    DBProvider.signInUsingGoogle();
+                    AuthController.signInUsingGoogle();
                   },
                   child: const GoogleLogo(
                     size: 20,
@@ -142,7 +142,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future signIn() async {
-    DBProvider.signInUsingEmail(
+    AuthController.signInUsingEmail(
         _emailController.text, _passwordController.text);
   }
 }

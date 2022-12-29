@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../Core/colors.dart';
+import '../../../Core/Shared/colors.dart';
 import 'login_form.dart';
 import 'sign_up_form.dart';
 

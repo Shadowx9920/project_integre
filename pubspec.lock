@@ -270,6 +270,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.7"
+  flutter_rating_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_rating_bar
+      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -296,6 +304,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.5"
+  get_storage:
+    dependency: "direct main"
+    description:
+      name: get_storage
+      sha256: "00b3908d9cd4138738b4db69bcc0fc1cf4ee8570c06594136569470f32a84207"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   http:
     dependency: transitive
     description:
@@ -340,10 +356,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_ios
-      sha256: "2c59612273411ecb0beccb11e49db7272975c882f5866c7948017cb6acb3557e"
+      sha256: "84231f4a538ad48055d419e6e891848a717962af789bf7427f94e41710a45f83"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.6+3"
+    version: "0.8.6+4"
   image_picker_platform_interface:
     dependency: transitive
     description:

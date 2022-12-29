@@ -1,8 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:project_integre/Core/Database/Functions/db_provider.dart';
+import 'package:project_integre/Core/Database/Functions/auth_controller.dart';
 
-import '../../../Core/google_logo.dart';
+import '../../../Core/Shared/google_logo.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm(
@@ -146,7 +146,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    DBProvider.signUpUsingGoogle();
+                    AuthController.signUpUsingGoogle();
                   },
                   child: const GoogleLogo(
                     size: 20,
@@ -164,7 +164,7 @@ class _SignUpFormState extends State<SignUpForm> {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) return;
 
-    DBProvider.signUpUsingEmail(
+    AuthController.signUpUsingEmail(
         _emailController.text.trim(), _passwordController.text.trim());
   }
 }

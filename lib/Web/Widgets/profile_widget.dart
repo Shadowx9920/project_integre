@@ -1,97 +1,11 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:project_integre/Core/Database/Functions/auth_controller.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
 
-import 'settings_page.dart';
-
-class MainAndroidPage extends StatefulWidget {
-  const MainAndroidPage({super.key});
-
-  @override
-  State<MainAndroidPage> createState() => _MainAndroidPageState();
-}
-
-class _MainAndroidPageState extends State<MainAndroidPage> {
-  final List<Widget> _pages = [
-    //TODO: Add pages
-    const HomeWidget(),
-    const Center(child: Text("List")),
-    const Center(child: Text("Compare")),
-    const ProfileWidget(),
-  ];
-
-  int _selectedIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              child: _pages[_selectedIndex],
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  Get.to(() => const AndroidSettingsPage());
-                },
-              ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: CurvedNavigationBar(
-          color: Colors.blue,
-          backgroundColor: Colors.white,
-          buttonBackgroundColor: Colors.blue,
-          items: const <Widget>[
-            Icon(Icons.home),
-            Icon(Icons.list),
-            Icon(Icons.compare_arrows),
-            Icon(Icons.person),
-          ],
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(size.height * 0.1),
-            child: Lottie.asset(
-              "assets/animations/work.json",
-              frameRate: FrameRate(60),
-              repeat: true,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+import '../../Core/Database/Functions/auth_controller.dart';
 
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({Key? key}) : super(key: key);
@@ -224,69 +138,83 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-          return Center(
-            child: SingleChildScrollView(
-              child: Column(
+          return SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Row(
                 children: [
-                  WidgetCircularAnimator(
-                    innerColor: Colors.blue,
-                    outerColor: Colors.blue[300] as Color,
-                    size: size.height * 0.2,
-                    child: CircularProfileAvatar(
-                      "",
-                      cacheImage: true,
-                      radius: size.height * 0.15,
-                      backgroundColor: Colors.transparent,
-                      borderWidth: 0,
-                      borderColor: Colors.transparent,
-                      // onTap: () {
-                      //   final ImagePicker picker = ImagePicker();
-                      //   picker.pickImage(source: ImageSource.gallery).then(
-                      //     (value) {
-                      //       if (value != null) {
-                      //         DBProvider.updateAvatar(value.path);
-                      //       }
-                      //     },
-                      //   );
-                      // },
-                      child: (snapshot.data.photoURL != null)
-                          ? Image.network(snapshot.data.photoURL)
-                          : Icon(
-                              Icons.person,
-                              size: size.height * 0.1,
-                            ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: size.width * 0.1,
+                      right: size.width * 0.1,
+                    ),
+                    child: WidgetCircularAnimator(
+                      innerColor: Colors.blue,
+                      outerColor: Colors.blue[300] as Color,
+                      size: size.height * 0.4,
+                      child: CircularProfileAvatar(
+                        "",
+                        cacheImage: true,
+                        radius: size.height * 0.35,
+                        backgroundColor: Colors.transparent,
+                        borderWidth: 0,
+                        borderColor: Colors.transparent,
+                        child: (snapshot.data.photoURL != null)
+                            ? Image.network(snapshot.data.photoURL)
+                            : Icon(
+                                Icons.person,
+                                size: size.height * 0.1,
+                              ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  if (snapshot.data.displayName != null)
-                    Text(snapshot.data.displayName!),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(snapshot.data.email!),
-                      const SizedBox(width: 10),
-                      (snapshot.data.emailVerified)
-                          ? const Icon(Icons.verified)
-                          : Container(),
-                    ],
+                  const VerticalDivider(
+                    thickness: 10,
+                    color: Colors.blue,
                   ),
-                  const SizedBox(height: 20),
-                  Row(
+                  SizedBox(width: size.width * 0.1),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        child: const Text("Edit Profile"),
-                        onPressed: () {
-                          _modifyDialogue(context);
-                        },
+                      const Spacer(),
+                      Row(
+                        children: [
+                          const Text("Name: "),
+                          const SizedBox(width: 10),
+                          if (snapshot.data.displayName != null)
+                            Text(snapshot.data.displayName!),
+                        ],
                       ),
-                      SizedBox(width: size.width * 0.1),
-                      ElevatedButton(
-                        child: const Text("Sign Out"),
-                        onPressed: () {
-                          FirebaseAuth.instance.signOut();
-                        },
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Email: "),
+                          const SizedBox(width: 10),
+                          Text(snapshot.data.email!),
+                          const SizedBox(width: 10),
+                          (snapshot.data.emailVerified)
+                              ? const Icon(Icons.verified)
+                              : Container(),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            child: const Text("Edit Profile"),
+                            onPressed: () {
+                              _modifyDialogue(context);
+                            },
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            child: const Text("Sign Out"),
+                            onPressed: () {
+                              FirebaseAuth.instance.signOut();
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),

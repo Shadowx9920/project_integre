@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-class DBProvider {
+class AuthController {
   static Future<bool> signInUsingEmail(String email, String password) async {
     try {
       await FirebaseAuth.instance

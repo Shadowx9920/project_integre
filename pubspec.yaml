@@ -10,21 +10,20 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following are developemnt dependencies
+  # The following are General tools
   get: ^4.6.5
+  prefs: ^4.0.0
+  email_validator: ^2.1.17
+  get_storage: ^2.0.3
 
   # The following is for database management
   firebase_core: ^2.4.0
   firebase_auth: ^4.2.0
   cloud_firestore: ^4.3.0
-  prefs: ^4.0.0
 
-  # The following is for animations
+  # The following is for images and animations
   lottie: ^2.0.0
   flutter_svg: ^1.1.6
-
-  # The following are General tools
-  email_validator: ^2.1.17
 
   #the following is for ui elemenets
   settings_ui: ^2.0.2
@@ -35,6 +34,7 @@ dependencies:
   eva_icons_flutter: ^3.1.0
   liquid_swipe: ^3.0.0
   smooth_page_indicator: ^1.0.0+2
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
