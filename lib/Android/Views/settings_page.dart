@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-class AndroidSettingsPage extends StatelessWidget {
+import '../../Core/Shared/theme_service.dart';
+
+class AndroidSettingsPage extends StatefulWidget {
   const AndroidSettingsPage({Key? key}) : super(key: key);
 
   @override
+  State<AndroidSettingsPage> createState() => _AndroidSettingsPageState();
+}
+
+class _AndroidSettingsPageState extends State<AndroidSettingsPage> {
+  @override
   Widget build(BuildContext context) {
+    bool isDark = GetStorage().read('isDarkMode') ?? false;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -16,11 +25,13 @@ class AndroidSettingsPage extends StatelessWidget {
           SettingsSection(
             tiles: [
               SettingsTile.switchTile(
-                initialValue: true,
+                initialValue: isDark,
                 leading: const Icon(Icons.format_paint),
                 title: const Text('Dark Mode'),
                 onToggle: (value) {
-                  Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                  ThemeService().switchTheme();
+                  isDark = GetStorage().read('isDarkMode');
+                  setState(() {});
                 },
               ),
             ],

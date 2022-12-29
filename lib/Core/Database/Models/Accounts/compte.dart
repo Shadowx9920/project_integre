@@ -1,14 +1,26 @@
+part '../JsonUtils/compte.g.dart';
+
 class Compte {
   int id;
   String email;
   String password;
-  String status;
+  String nom;
+  String prenom;
+  int accType;
+  //accType: 0Admin, 1Rsp, 2Prof, 3Student
 
   Compte(
       {this.id = 0,
+      required this.nom,
+      required this.prenom,
       required this.email,
       required this.password,
-      required this.status});
+      required this.accType});
+
+  // Json
+
+  factory Compte.fromJson(Map<String, dynamic> json) => _$CompteFromJson(json);
+  Map<String, dynamic> toJson() => _$CompteToJson(this);
 
   //TODO: Account functions
 
@@ -38,6 +50,7 @@ class Compte {
     // var db = await DBProvider.db.database;
     // var res = await db.query("compte", where: "id = ?", whereArgs: [id]);
     // return res.isNotEmpty ? Compte.fromMap(res.first) : Null;
-    return Compte(id: 0, email: "", password: "", status: "");
+    return Compte(
+        id: 0, email: "", password: "", accType: 0, nom: "", prenom: "");
   }
 }
