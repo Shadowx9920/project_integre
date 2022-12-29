@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../Core/Shared/colors.dart';
 import 'login_form.dart';
 import 'sign_up_form.dart';
 
@@ -36,10 +35,9 @@ class _FormsPanelState extends State<FormsPanel> {
             child: Card(
               elevation: 40,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), //ACHRAF this was 40
+                borderRadius: BorderRadius.circular(20),
               ),
-              //surfaceTintColor: Colors.blue.shade400,
-              color: WebColors.backgroundColor, //ACHRAF this was nothing
+              color: Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

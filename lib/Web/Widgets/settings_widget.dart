@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -24,6 +23,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           title: const Text('Theme'),
           tiles: [
             SettingsTile.switchTile(
+              activeSwitchColor: Theme.of(context).primaryColor,
               title: const Text('Dark Mode'),
               leading: const Icon(Icons.brightness_4),
               initialValue: isDark,

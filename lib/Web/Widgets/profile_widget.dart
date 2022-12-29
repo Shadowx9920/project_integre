@@ -148,8 +148,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       right: size.width * 0.1,
                     ),
                     child: WidgetCircularAnimator(
-                      innerColor: Colors.blue,
-                      outerColor: Colors.blue[300] as Color,
+                      innerColor: Theme.of(context).primaryColor,
+                      outerColor: Theme.of(context).primaryColor,
                       size: size.height * 0.4,
                       child: CircularProfileAvatar(
                         "",
@@ -167,9 +167,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       ),
                     ),
                   ),
-                  const VerticalDivider(
-                    thickness: 10,
-                    color: Colors.blue,
+                  VerticalDivider(
+                    thickness: 5,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(width: size.width * 0.1),
                   Column(

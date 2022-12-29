@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../Core/Shared/colors.dart';
 import '../Widgets/header_title.dart';
 import '../Widgets/profile_widget.dart';
 import '../Widgets/settings_widget.dart';
@@ -28,7 +27,7 @@ class _MainWebPageState extends State<MainWebPage> {
 
   Widget _buildHeader(Size size) {
     return Container(
-      color: WebColors.mainColor,
+      color: Theme.of(context).primaryColor,
       height: size.height * 0.07,
       padding: const EdgeInsets.only(
         left: 10,
@@ -74,7 +73,7 @@ class _MainWebPageState extends State<MainWebPage> {
 
   Widget _buildFooter(Size size) {
     return Container(
-      color: WebColors.secondaryColor,
+      color: Theme.of(context).primaryColorDark,
       width: double.infinity,
       height: size.height * 0.08,
       child: Row(

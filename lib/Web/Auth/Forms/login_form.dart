@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:project_integre/Core/Database/Functions/auth_controller.dart';
 
 import '../../../Core/Shared/google_logo.dart';
@@ -53,27 +55,21 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: 80),
-          Container(
+          SizedBox(
             width: widget.width / 3,
-            height: widget.height / 11,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4.0),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
             child: TextFormField(
+              cursorColor: Colors.blue,
               controller: _emailController,
               obscureText: false,
               decoration: const InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                ),
+                focusColor: Colors.blue,
                 contentPadding: EdgeInsets.all(15),
                 border: OutlineInputBorder(),
                 labelText: 'Login',
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.person,
                   color: Colors.blue,
@@ -82,27 +78,21 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: 20),
-          Container(
+          SizedBox(
             width: widget.width / 3,
-            height: widget.height / 11,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4.0),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
             child: TextFormField(
+              cursorColor: Colors.blue,
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                ),
+                focusColor: Colors.blue,
                 contentPadding: EdgeInsets.all(15),
                 border: OutlineInputBorder(),
                 labelText: 'Password',
+                labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
                   Icons.lock,
                   color: Colors.blue,
@@ -110,19 +100,46 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           SizedBox(
             width: widget.width / 3,
             child: Row(
               children: [
-                ElevatedButton(
-                  onPressed: signIn,
-                  child: const Text('Login'),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: widget.onClickSignUp,
-                  child: const Text('Sign Up'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: signIn,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                      ),
+                      child: const Text('Login'),
+                    ),
+                    const SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Don\'t have an account? ',
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: 'Sign up',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                widget.onClickSignUp();
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const Spacer(),
                 GestureDetector(
@@ -142,7 +159,12 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future signIn() async {
-    AuthController.signInUsingEmail(
+    bool isValid = await AuthController.signInUsingEmail(
         _emailController.text, _passwordController.text);
+
+    if (!isValid) {
+      Get.snackbar('Error', 'Please enter valid data');
+      return;
+    }
   }
 }
