@@ -1,16 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:project_integre/Core/Database/Models/Accounts/compte.dart';
+
+import 'users_controller.dart';
 
 class AuthController {
   static Future<bool> signInUsingEmail(String email, String password) async {
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        if (kDebugMode) {
-          print(value);
-        }
-      });
+          .signInWithEmailAndPassword(email: email, password: password);
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -20,15 +18,21 @@ class AuthController {
     return false;
   }
 
-  static Future<bool> signUpUsingEmail(String email, String password) async {
+  static Future<bool> signUpUsingEmail(
+      String name, String email, String password) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        if (kDebugMode) {
-          print(value);
-        }
-      });
+      UserCredential credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await credential.user!.updateDisplayName(name);
+      await UsersController.createAccount(
+        Compte(
+          id: credential.user!.uid,
+          email: email,
+          password: password,
+          accType: 3,
+          name: name,
+        ),
+      );
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -58,13 +62,16 @@ class AuthController {
 
   static Future<bool> signUpUsingGoogle() async {
     try {
-      await FirebaseAuth.instance
-          .signInWithPopup(GoogleAuthProvider())
-          .then((value) {
-        if (kDebugMode) {
-          print(value);
-        }
-      });
+      UserCredential credential =
+          await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
+      await UsersController.createAccount(
+        Compte(
+            email: credential.user!.email!,
+            accType: 3,
+            id: credential.user!.uid,
+            name: credential.user!.displayName!,
+            password: ''),
+      );
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -88,6 +95,17 @@ class AuthController {
         if (password.isNotEmpty) {
           await user.updatePassword(password);
         }
+
+        // update user in firestore
+        UsersController.updateAccount(
+          Compte(
+            id: user.uid,
+            email: email,
+            password: password,
+            accType: 3,
+            name: displayName,
+          ),
+        );
         return true;
       }
     } catch (e) {
@@ -105,6 +123,23 @@ class AuthController {
         if (path.isNotEmpty) {
           await user.updatePhotoURL(path);
         }
+        return true;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> deleteCurrentUser() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.delete();
+        // delete user in firestore
+        UsersController.deleteAccount(user.uid);
         return true;
       }
     } catch (e) {

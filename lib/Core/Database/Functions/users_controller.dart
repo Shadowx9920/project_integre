@@ -1,39 +1,96 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
+import '../Models/Accounts/compte.dart';
+
 class UsersController {
-  // // Path: lib\Core\Database\Functions\users_controller.dart
-  // static Future<void> addUser(User user) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(user.uid)
-  //       .set(user.toJson());
-  // }
+  static Future<bool> createAccount(Compte compte) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(compte.id)
+          .set(compte.toJson());
 
-  // // Path: lib\Core\Database\Functions\users_controller.dart
-  // static Future<void> updateUser(User user) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(user.uid)
-  //       .update(user.toJson());
-  // }
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
 
-  // // Path: lib\Core\Database\Functions\users_controller.dart
-  // static Future<void> deleteUser(String uid) async {
-  //   await FirebaseFirestore.instance.collection('users').doc(uid).delete();
-  // }
+  static Future<bool> deleteAccount(String uid) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
 
-  // // Path: lib\Core\Database\Functions\users_controller.dart
-  // static Future<User> getUser(String uid) async {
-  //   DocumentSnapshot documentSnapshot =
-  //       await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  //   return User.fromJson(documentSnapshot.data());
-  // }
+  static Future<bool> updateAccount(Compte compte) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(compte.id)
+          .update(compte.toJson());
 
-  // // Path: lib\Core\Database\Functions\users_controller.dart
-  // static Stream<List<User>> getUsers() {
-  //   return FirebaseFirestore.instance
-  //       .collection('users')
-  //       .snapshots()
-  //       .map((snapshot) => snapshot.docs
-  //           .map((doc) => User.fromJson(doc.data()))
-  //           .toList());
-  // }
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  static Future<Compte?> getAccount(String uid) async {
+    DocumentSnapshot? documentSnapshot;
+    try {
+      documentSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+        return null;
+      }
+    }
+    if (documentSnapshot != null && documentSnapshot.exists) {
+      return Compte.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+    }
+    return null;
+  }
+
+  static Stream<List<Compte>> getAllAccounts() {
+    try {
+      return FirebaseFirestore.instance.collection('users').snapshots().map(
+          (snapshot) =>
+              snapshot.docs.map((doc) => Compte.fromJson(doc.data())).toList());
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return const Stream.empty();
+  }
+
+  static Future<bool> changeAccountType(String uid, int type) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'accType': type});
+
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
 }

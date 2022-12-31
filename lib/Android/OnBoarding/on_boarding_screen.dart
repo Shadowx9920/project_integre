@@ -110,6 +110,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
                             prefs.setBool("showHome", true);
+                            // ignore: use_build_context_synchronously
                             Navigator.pushReplacementNamed(context, '/');
                           },
                           child: const Text("Get Started"),

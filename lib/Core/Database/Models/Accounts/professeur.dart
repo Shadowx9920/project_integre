@@ -7,15 +7,16 @@ class Professeur extends Compte {
 
   Professeur(
       {required super.email,
-      required super.nom,
-      required super.prenom,
+      required super.name,
       required super.password,
-      required super.accType});
+      required super.accType,
+      required super.id});
 
   // Json
 
   factory Professeur.fromJson(Map<String, dynamic> json) =>
       _$ProfesseurFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$ProfesseurToJson(this);
 
   //TODO: Request documents and download them 3la 7sab type

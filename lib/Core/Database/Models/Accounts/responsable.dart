@@ -10,16 +10,17 @@ class Responsable extends Compte {
 
   Responsable(
       {required super.email,
-      required super.nom,
-      required super.prenom,
+      required super.name,
       required super.password,
       required super.accType,
-      required this.idEtb});
+      required this.idEtb,
+      required super.id});
 
   // Json
 
   factory Responsable.fromJson(Map<String, dynamic> json) =>
       _$ResponsableFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$ResponsableToJson(this);
 
   //Functions

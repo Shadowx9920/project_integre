@@ -1,19 +1,17 @@
 part 'JsonUtils/etablissement.g.dart';
 
 class Etablissement {
-  int idEtb;
+  String uid;
   String nom;
   String email;
-  int idResponsable;
+  String idResponsable;
 
   Etablissement({
-    this.idEtb = 0,
+    this.uid = "",
     required this.nom,
-    this.idResponsable = 0,
+    required this.idResponsable,
     required this.email,
   });
-
-  // Json
 
   factory Etablissement.fromJson(Map<String, dynamic> json) =>
       _$EtablissementFromJson(json);

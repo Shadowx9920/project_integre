@@ -7,7 +7,7 @@ part of '../reunion.dart';
 // **************************************************************************
 
 Reunion _$ReunionFromJson(Map<String, dynamic> json) => Reunion(
-      idReunion: json['idReunion'] as int,
+      uid: json['uid'] as String,
       date: DateTime.parse(json['date'] as String),
       participants: (json['participants'] as List<dynamic>)
           .map((e) => Compte.fromJson(e as Map<String, dynamic>))
@@ -15,7 +15,7 @@ Reunion _$ReunionFromJson(Map<String, dynamic> json) => Reunion(
     );
 
 Map<String, dynamic> _$ReunionToJson(Reunion instance) => <String, dynamic>{
-      'idReunion': instance.idReunion,
+      'uid': instance.uid,
       'date': instance.date.toIso8601String(),
       'participants': instance.participants,
     };

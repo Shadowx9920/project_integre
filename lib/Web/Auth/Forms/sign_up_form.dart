@@ -25,10 +25,12 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   @override
   void initState() {
+    _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
@@ -56,7 +58,30 @@ class _SignUpFormState extends State<SignUpForm> {
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 60),
+          SizedBox(
+            width: widget.width / 3,
+            child: TextFormField(
+              cursorColor: Colors.blue,
+              controller: _nameController,
+              obscureText: false,
+              decoration: const InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                ),
+                focusColor: Colors.blue,
+                contentPadding: EdgeInsets.all(15),
+                border: OutlineInputBorder(),
+                labelText: 'Name',
+                labelStyle: TextStyle(color: Colors.blue),
+                prefixIcon: Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
           SizedBox(
             width: widget.width / 3,
             child: TextFormField(
@@ -70,10 +95,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 focusColor: Colors.blue,
                 contentPadding: EdgeInsets.all(15),
                 border: OutlineInputBorder(),
-                labelText: 'Login',
+                labelText: 'Email',
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.person,
+                  Icons.email,
                   color: Colors.blue,
                 ),
               ),
@@ -119,7 +144,7 @@ class _SignUpFormState extends State<SignUpForm> {
               },
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           SizedBox(
             width: widget.width / 3,
             child: Row(
@@ -184,7 +209,7 @@ class _SignUpFormState extends State<SignUpForm> {
       return;
     }
 
-    AuthController.signUpUsingEmail(
+    AuthController.signUpUsingEmail(_nameController.text.trim(),
         _emailController.text.trim(), _passwordController.text.trim());
   }
 }

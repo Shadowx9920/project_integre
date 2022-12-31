@@ -8,15 +8,15 @@ part of '../etablissement.dart';
 
 Etablissement _$EtablissementFromJson(Map<String, dynamic> json) =>
     Etablissement(
-      idEtb: json['idEtb'] as int? ?? 0,
+      uid: json['uid'] as String,
       nom: json['nom'] as String,
-      idResponsable: json['idResponsable'] as int? ?? 0,
+      idResponsable: json['idResponsable'] as String,
       email: json['email'] as String,
     );
 
 Map<String, dynamic> _$EtablissementToJson(Etablissement instance) =>
     <String, dynamic>{
-      'idEtb': instance.idEtb,
+      'uid': instance.uid,
       'nom': instance.nom,
       'email': instance.email,
       'idResponsable': instance.idResponsable,

@@ -7,14 +7,15 @@ part '../JsonUtils/admin.g.dart';
 class Admin extends Compte {
   Admin(
       {required super.email,
-      required super.nom,
-      required super.prenom,
+      required super.name,
       required super.password,
-      required super.accType});
+      required super.accType,
+      required super.id});
 
   // Json
 
   factory Admin.fromJson(Map<String, dynamic> json) => _$AdminFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$AdminToJson(this);
 
   // Functions

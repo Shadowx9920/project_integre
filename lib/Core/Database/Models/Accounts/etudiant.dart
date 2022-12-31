@@ -14,16 +14,17 @@ class Etudiant extends Compte {
       {required super.email,
       required super.password,
       required super.accType,
-      required super.nom,
-      required super.prenom,
+      required super.name,
       required this.niveau,
       required this.idEtb,
       required this.idProf,
-      required this.isStage});
+      required this.isStage,
+      required super.id});
 
   // Json
 
   factory Etudiant.fromJson(Map<String, dynamic> json) =>
       _$EtudiantFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$EtudiantToJson(this);
 }
