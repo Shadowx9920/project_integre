@@ -27,7 +27,6 @@ class _MainWebAppState extends State<MainWebApp> {
       debugShowCheckedModeBanner: false,
       routes: {
         "/": (context) => const AuthCheck(),
-        "/Home": (context) => const MainWebPage(),
         "/404": (context) => const ErrorPage(),
       },
       initialRoute: "/",

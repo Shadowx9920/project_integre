@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Lists/users_list.dart';
+import '../Tables/etablissment_table.dart';
 import '../Widgets/header_title.dart';
 import '../Widgets/profile_widget.dart';
 import '../Widgets/settings_widget.dart';
@@ -13,7 +15,11 @@ class MainWebPage extends StatefulWidget {
 
 class _MainWebPageState extends State<MainWebPage> {
   final List<Widget> _pages = const [
-    Center(child: Text("home")),
+    Center(
+      child: Text("Home"),
+    ),
+    UsersListPage(),
+    EtablissementsTable(),
     ProfileWidget(),
     SettingsWidget(),
   ];
@@ -35,8 +41,10 @@ class _MainWebPageState extends State<MainWebPage> {
       ),
       child: Row(
         children: [
-          const FlutterLogo(
-            size: 20,
+          Image.asset(
+            'assets/images/logo-UIR.png',
+            height: 50,
+            width: 50,
           ),
           const Spacer(),
           HeaderButton(
@@ -49,11 +57,28 @@ class _MainWebPageState extends State<MainWebPage> {
             },
           ),
           HeaderButton(
+            text: "Users",
+            icon: Icons.people,
+            onPressed: () {
+              setState(() {
+                _currentPage = _pages[1];
+              });
+            },
+          ),
+          HeaderButton(
+              text: 'Etablissements',
+              onPressed: () {
+                setState(() {
+                  _currentPage = _pages[2];
+                });
+              },
+              icon: Icons.business),
+          HeaderButton(
             text: "Profile",
             icon: Icons.person,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[1];
+                _currentPage = _pages[3];
               });
             },
           ),
@@ -62,39 +87,10 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.settings,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[2];
+                _currentPage = _pages[4];
               });
             },
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFooter(Size size) {
-    return Container(
-      color: Theme.of(context).primaryColorDark,
-      width: double.infinity,
-      height: size.height * 0.08,
-      child: Row(
-        children: [
-          const Spacer(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: const Text("Contact Us >"),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showAboutDialog(context: context);
-                },
-                child: const Text("About >"),
-              ),
-            ],
-          ),
-          const SizedBox(width: 20),
         ],
       ),
     );
@@ -104,17 +100,30 @@ class _MainWebPageState extends State<MainWebPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: _buildFooter(size),
-      body: Column(
+      body: Stack(
         children: [
-          _buildHeader(size),
-          SizedBox(
-            height: size.height * 0.8,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              child: _currentPage,
-            ),
+          Column(
+            children: [
+              _buildHeader(size),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: _currentPage,
+                ),
+              ),
+            ],
           ),
+          const Positioned(
+            bottom: 0,
+            left: 0,
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Copyright \u00A9 Yorastd Company. All rights reserved.',
+                style: TextStyle(fontSize: 12.0),
+              ),
+            ),
+          )
         ],
       ),
     );

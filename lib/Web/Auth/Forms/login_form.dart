@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:project_integre/Core/Database/Functions/auth_controller.dart';
 
 import '../../../Core/Shared/google_logo.dart';
@@ -68,10 +67,10 @@ class _LoginFormState extends State<LoginForm> {
                 focusColor: Colors.blue,
                 contentPadding: EdgeInsets.all(15),
                 border: OutlineInputBorder(),
-                labelText: 'Login',
+                labelText: 'Email',
                 labelStyle: TextStyle(color: Colors.blue),
                 prefixIcon: Icon(
-                  Icons.person,
+                  Icons.email,
                   color: Colors.blue,
                 ),
               ),
@@ -159,12 +158,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future signIn() async {
-    bool isValid = await AuthController.signInUsingEmail(
+    await AuthController.signInUsingEmail(
         _emailController.text, _passwordController.text);
-
-    if (!isValid) {
-      Get.snackbar('Error', 'Please enter valid data');
-      return;
-    }
   }
 }

@@ -9,7 +9,7 @@ part of '../etablissement.dart';
 Etablissement _$EtablissementFromJson(Map<String, dynamic> json) =>
     Etablissement(
       uid: json['uid'] as String,
-      nom: json['nom'] as String,
+      name: json['name'] as String,
       idResponsable: json['idResponsable'] as String,
       email: json['email'] as String,
     );
@@ -17,7 +17,7 @@ Etablissement _$EtablissementFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$EtablissementToJson(Etablissement instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'nom': instance.nom,
+      'name': instance.name,
       'email': instance.email,
       'idResponsable': instance.idResponsable,
     };

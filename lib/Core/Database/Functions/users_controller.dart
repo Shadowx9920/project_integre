@@ -67,9 +67,16 @@ class UsersController {
 
   static Stream<List<Compte>> getAllAccounts() {
     try {
-      return FirebaseFirestore.instance.collection('users').snapshots().map(
-          (snapshot) =>
-              snapshot.docs.map((doc) => Compte.fromJson(doc.data())).toList());
+      return FirebaseFirestore.instance
+          .collection('users')
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map(
+                (doc) => Compte.fromJson(
+                  doc.data(),
+                ),
+              )
+              .toList());
     } catch (e) {
       if (kDebugMode) {
         print(e);

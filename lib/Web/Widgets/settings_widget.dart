@@ -43,6 +43,22 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 rate.showRatingDialog(context);
               },
             ),
+            SettingsTile.navigation(
+              title: const Text("Contact Us"),
+              enabled: true,
+              leading: const Icon(Icons.contact_mail),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onPressed: (context) {},
+            ),
+            SettingsTile.navigation(
+              title: const Text("About And Licenses"),
+              enabled: true,
+              leading: const Icon(Icons.star),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onPressed: (context) {
+                showAboutDialog(context: context);
+              },
+            ),
           ],
         ),
       ],

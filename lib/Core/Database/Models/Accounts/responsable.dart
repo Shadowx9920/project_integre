@@ -33,8 +33,6 @@ class Responsable extends Compte {
     return false;
   }
 
-  //TODO: Request documents and download them 3la 7sab type
-
   Future<bool> setDeadline(int idEtudiant, int index, DateTime deadline) async {
     return false;
   }

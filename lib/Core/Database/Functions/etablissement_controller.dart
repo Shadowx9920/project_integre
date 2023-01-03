@@ -6,11 +6,23 @@ import '../Models/etablissement.dart';
 class EtablissmentController {
   static Future<bool> createEtablissement(Etablissement etablissement) async {
     try {
+      await FirebaseFirestore.instance.collection('etablissement').doc().set(
+            etablissement.toJson(),
+          );
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('etablissement')
+              .where('name', isEqualTo: etablissement.name)
+              .where('email', isEqualTo: etablissement.email)
+              .where('idResponsable', isEqualTo: etablissement.idResponsable)
+              .get();
+      final String uid = querySnapshot.docs.first.id;
       await FirebaseFirestore.instance
           .collection('etablissement')
-          .doc(etablissement.uid)
-          .set(etablissement.toJson());
-
+          .doc(uid)
+          .update(
+        {'uid': uid},
+      );
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -40,8 +52,9 @@ class EtablissmentController {
       await FirebaseFirestore.instance
           .collection('etablissement')
           .doc(etablissement.uid)
-          .update(etablissement.toJson());
-
+          .update(
+            etablissement.toJson(),
+          );
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -75,9 +88,11 @@ class EtablissmentController {
       return FirebaseFirestore.instance
           .collection('etablissement')
           .snapshots()
-          .map((snapshot) => snapshot.docs
-              .map((doc) => Etablissement.fromJson(doc.data()))
-              .toList());
+          .map(
+            (snapshot) => snapshot.docs
+                .map((doc) => Etablissement.fromJson(doc.data()))
+                .toList(),
+          );
     } catch (e) {
       if (kDebugMode) {
         print(e);

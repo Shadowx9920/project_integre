@@ -2,13 +2,13 @@ part 'JsonUtils/etablissement.g.dart';
 
 class Etablissement {
   String uid;
-  String nom;
+  String name;
   String email;
   String idResponsable;
 
   Etablissement({
     this.uid = "",
-    required this.nom,
+    required this.name,
     required this.idResponsable,
     required this.email,
   });

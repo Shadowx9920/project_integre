@@ -15,7 +15,6 @@ class MainAndroidPage extends StatefulWidget {
 
 class _MainAndroidPageState extends State<MainAndroidPage> {
   final List<Widget> _pages = [
-    //TODO: Add pages
     const HomeWidget(),
     const Center(child: Text("List")),
     const Center(child: Text("Compare")),

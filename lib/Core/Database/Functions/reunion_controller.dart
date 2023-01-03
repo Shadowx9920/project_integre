@@ -9,8 +9,9 @@ class ReunionController {
       await FirebaseFirestore.instance
           .collection('reunion')
           .doc(reunion.uid)
-          .set(reunion.toJson());
-
+          .set(
+            reunion.toJson(),
+          );
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -37,8 +38,9 @@ class ReunionController {
       await FirebaseFirestore.instance
           .collection('reunion')
           .doc(reunion.uid)
-          .update(reunion.toJson());
-
+          .update(
+            reunion.toJson(),
+          );
       return true;
     } catch (e) {
       if (kDebugMode) {

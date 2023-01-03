@@ -18,6 +18,4 @@ class Professeur extends Compte {
       _$ProfesseurFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$ProfesseurToJson(this);
-
-  //TODO: Request documents and download them 3la 7sab type
 }

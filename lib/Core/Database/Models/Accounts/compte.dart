@@ -15,8 +15,6 @@ class Compte {
       required this.password,
       required this.accType});
 
-  // Json
-
   factory Compte.fromJson(Map<String, dynamic> json) => _$CompteFromJson(json);
   Map<String, dynamic> toJson() => _$CompteToJson(this);
 }
