@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../Core/Database/Functions/etablissement_controller.dart';
+import '../../Core/Database/Controllers/etablissement_controller.dart';
 import '../../Core/Database/Models/etablissement.dart';
 import '../Widgets/scrollable_widget.dart';
 
@@ -53,7 +53,7 @@ class _EtablissementsTableState extends State<EtablissementsTable> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: EtablissmentController.getAllEtablissements(),
+      stream: EtablissementController.getAllEtablissements(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return ScrollableWidget(

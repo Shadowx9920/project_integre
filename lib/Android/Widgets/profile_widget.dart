@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
 
-import '../../Core/Database/Functions/auth_controller.dart';
+import '../../Core/Database/Controllers/auth_controller.dart';
 
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({Key? key}) : super(key: key);

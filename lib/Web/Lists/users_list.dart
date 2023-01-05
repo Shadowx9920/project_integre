@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Core/Database/Functions/users_controller.dart';
+import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/Accounts/compte.dart';
 import '../Widgets/scrollable_widget.dart';
 
@@ -14,7 +14,7 @@ class UsersListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: UsersController.getAllAccounts(),
+      stream: UsersController.getAllAccountsStream(),
       builder: (BuildContext conntextn, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return UsersList(
@@ -45,6 +45,27 @@ class UsersList extends StatefulWidget {
 
 class _UsersListState extends State<UsersList> {
   bool _passwordsVisible = false;
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late int accType;
+
+  @override
+  void initState() {
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -89,7 +110,7 @@ class _UsersListState extends State<UsersList> {
       const SizedBox(width: 10),
       ElevatedButton(
         child: const Text("Add Account"),
-        onPressed: () {},
+        onPressed: () => _addAccount(),
       ),
       const SizedBox(width: 10),
       ElevatedButton(
@@ -97,6 +118,104 @@ class _UsersListState extends State<UsersList> {
         onPressed: () {},
       ),
     ];
+  }
+
+  _addAccount() {
+    nameController.text = "";
+    emailController.text = "";
+    passwordController.text = "";
+    accType = 0;
+    Get.defaultDialog(
+      title: "Add Account",
+      content: Column(
+        children: [
+          TextFormField(
+            controller: nameController,
+            cursorColor: Theme.of(context).primaryColor,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 2.0),
+              ),
+              focusColor: Theme.of(context).primaryColor,
+              contentPadding: const EdgeInsets.all(15),
+              border: const OutlineInputBorder(),
+              labelText: 'Name',
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+              prefixIcon: Icon(
+                Icons.person,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            controller: emailController,
+            cursorColor: Theme.of(context).primaryColor,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 2.0),
+              ),
+              focusColor: Theme.of(context).primaryColor,
+              contentPadding: const EdgeInsets.all(15),
+              border: const OutlineInputBorder(),
+              labelText: 'Email',
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+              prefixIcon: Icon(
+                Icons.email,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            controller: passwordController,
+            cursorColor: Theme.of(context).primaryColor,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor, width: 2.0),
+              ),
+              focusColor: Theme.of(context).primaryColor,
+              contentPadding: const EdgeInsets.all(15),
+              border: const OutlineInputBorder(),
+              labelText: 'Password',
+              labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+              prefixIcon: Icon(
+                Icons.lock,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          ChipsChoice<int>.single(
+            value: accType,
+            onChanged: (int val) => setState(() => accType = val),
+            choiceItems: C2Choice.listFrom<int, String>(
+              source: const ['Admin', 'Responsable', 'Prof', 'Student'],
+              value: (int index, String item) => index,
+              label: (int index, String item) => item,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text("Cancel"),
+        ),
+        TextButton(
+          onPressed: () {
+            //TODO: add account function
+            Get.back();
+          },
+          child: const Text("Save"),
+        ),
+      ],
+    );
   }
 }
 
@@ -205,7 +324,31 @@ class _ProfileCardState extends State<ProfileCard> {
                 IconButton(
                   splashRadius: 10,
                   icon: const Icon(Icons.delete),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.defaultDialog(
+                      title: "Delete Account",
+                      content: const Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text(
+                            "Are you sure you want to delete this account?"),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            UsersController.deleteAccount(widget.compte.id);
+                            Get.back();
+                          },
+                          child: const Text("Delete"),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ]),
             ),

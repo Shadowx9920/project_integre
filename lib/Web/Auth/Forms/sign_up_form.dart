@@ -2,7 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_integre/Core/Database/Functions/auth_controller.dart';
+import 'package:project_integre/Core/Database/Controllers/auth_controller.dart';
 
 import '../../../Core/Shared/google_logo.dart';
 

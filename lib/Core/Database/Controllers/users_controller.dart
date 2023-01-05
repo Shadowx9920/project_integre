@@ -1,9 +1,31 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import '../Models/Accounts/compte.dart';
 
 class UsersController {
+  static Future<bool> checkIfUserExists(String email) async {
+    bool userExists = false;
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get()
+          .then((value) {
+        if (value.docs.isNotEmpty) {
+          userExists = true;
+        }
+      });
+      return userExists;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
   static Future<bool> createAccount(Compte compte) async {
     try {
       await FirebaseFirestore.instance
@@ -65,7 +87,7 @@ class UsersController {
     return null;
   }
 
-  static Stream<List<Compte>> getAllAccounts() {
+  static Stream<List<Compte>> getAllAccountsStream() {
     try {
       return FirebaseFirestore.instance
           .collection('users')
@@ -97,6 +119,34 @@ class UsersController {
       if (kDebugMode) {
         print(e);
       }
+    }
+    return false;
+  }
+
+  static bool checkIfUserIsAdmin(Compte compte) {
+    if (compte.accType == 0) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool checkIfUserIsResponsable(Compte compte) {
+    if (compte.accType == 1) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool checkIfUserIsProfesseur(Compte compte) {
+    if (compte.accType == 2) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool checkIfUserIsEtudiant(Compte compte) {
+    if (compte.accType == 3) {
+      return true;
     }
     return false;
   }

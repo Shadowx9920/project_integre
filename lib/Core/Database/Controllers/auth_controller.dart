@@ -9,16 +9,6 @@ class AuthController {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-
-      CurrentFireStoreUser.setCurrentUser(
-        FirebaseAuth.instance.currentUser!.uid,
-      );
-
-      bool userExist = await CurrentFireStoreUser.checkIfCurrentUserExists();
-
-      debugPrint(
-        " Current user exist: $userExist",
-      );
       return true;
     } catch (e) {
       if (kDebugMode) {
@@ -156,117 +146,6 @@ class AuthController {
       if (kDebugMode) {
         print(e);
       }
-    }
-    return false;
-  }
-}
-
-class CurrentFireStoreUser {
-  static Compte? currentUser;
-
-  static Future<bool> setCurrentUser(String uid) async {
-    try {
-      debugPrint("setting current user: $uid");
-      Compte? compte = await UsersController.getAccount(uid);
-      if (compte != null) {
-        debugPrint("Done");
-        debugPrint("Current user: " + compte.email);
-        currentUser = compte;
-      } else {
-        debugPrint("Failed");
-        currentUser = null;
-      }
-      return true;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    return false;
-  }
-
-  static Future<bool> checkIfCurrentUserExists() async {
-    bool userExists = false;
-    try {
-      debugPrint("Current user: $currentUser");
-      if (currentUser != null) {
-        UsersController.getAllAccounts().listen((event) {
-          for (Compte account in event) {
-            debugPrint("Comparing with: $account.id");
-            if (account.id == currentUser!.id) {
-              userExists = true;
-              break;
-            }
-          }
-        });
-      } else {
-        userExists = false;
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    return userExists;
-  }
-
-  //TODO: fix this
-  static Future<bool> checkIfUserExists(String email) async {
-    bool userExists = false;
-    try {
-      UsersController.getAllAccounts().listen((event) {
-        for (Compte account in event) {
-          if (account.email == email) {
-            userExists = true;
-            break;
-          }
-        }
-      });
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    return userExists;
-  }
-
-  static Future<Compte?> getCurrentUser() async {
-    Compte? compte;
-    try {
-      compte = await UsersController.getAccount(
-          FirebaseAuth.instance.currentUser!.uid);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-    return compte;
-  }
-
-  static bool checkIfUserIsAdmin(Compte compte) {
-    if (compte.accType == 0) {
-      return true;
-    }
-    return false;
-  }
-
-  static bool checkIfUserIsResponsable(Compte compte) {
-    if (compte.accType == 1) {
-      return true;
-    }
-    return false;
-  }
-
-  static bool checkIfUserIsProfesseur(Compte compte) {
-    if (compte.accType == 2) {
-      return true;
-    }
-    return false;
-  }
-
-  static bool checkIfUserIsEtudiant(Compte compte) {
-    if (compte.accType == 3) {
-      return true;
     }
     return false;
   }

@@ -1,7 +1,7 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_integre/Core/Database/Functions/users_controller.dart';
+import 'package:project_integre/Core/Database/Controllers/users_controller.dart';
 
 import '../../Core/Database/Models/Accounts/compte.dart';
 import '../Widgets/scrollable_widget.dart';
@@ -41,7 +41,7 @@ class _UsersTablePageState extends State<UsersTablePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return StreamBuilder(
-      stream: UsersController.getAllAccounts(),
+      stream: UsersController.getAllAccountsStream(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return Padding(

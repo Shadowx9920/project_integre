@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../Models/etablissement.dart';
 
-class EtablissmentController {
+class EtablissementController {
   static Future<bool> createEtablissement(Etablissement etablissement) async {
     try {
       await FirebaseFirestore.instance.collection('etablissement').doc().set(
