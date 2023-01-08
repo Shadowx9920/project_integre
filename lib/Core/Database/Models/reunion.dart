@@ -1,13 +1,18 @@
-import 'Accounts/compte.dart';
-
 part 'JsonUtils/reunion.g.dart';
 
 class Reunion {
   String uid;
+  String subject;
   DateTime date;
-  List<Compte> participants = [];
+  String profId;
+  List<String> participants = [];
 
-  Reunion({required this.uid, required this.date, required this.participants});
+  Reunion(
+      {required this.uid,
+      required this.subject,
+      required this.date,
+      required this.participants,
+      required this.profId});
 
   factory Reunion.fromJson(Map<String, dynamic> json) =>
       _$ReunionFromJson(json);

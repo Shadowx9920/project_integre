@@ -8,14 +8,18 @@ part of '../reunion.dart';
 
 Reunion _$ReunionFromJson(Map<String, dynamic> json) => Reunion(
       uid: json['uid'] as String,
+      subject: json['subject'] as String,
       date: DateTime.parse(json['date'] as String),
+      profId: json['profId'] as String,
       participants: (json['participants'] as List<dynamic>)
-          .map((e) => Compte.fromJson(e as Map<String, dynamic>))
+          .map((e) => e as String)
           .toList(),
     );
 
 Map<String, dynamic> _$ReunionToJson(Reunion instance) => <String, dynamic>{
       'uid': instance.uid,
+      'subject': instance.subject,
       'date': instance.date.toIso8601String(),
+      'profId': instance.profId,
       'participants': instance.participants,
     };

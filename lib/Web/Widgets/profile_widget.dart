@@ -209,6 +209,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                           const SizedBox(width: 20),
                           ElevatedButton(
+                            child: const Text("Send Email Verification"),
+                            onPressed: () {
+                              FirebaseAuth.instance.currentUser!
+                                  .sendEmailVerification();
+                            },
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
                             child: const Text("Sign Out"),
                             onPressed: () {
                               FirebaseAuth.instance.signOut();

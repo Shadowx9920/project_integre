@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:project_integre/Core/Database/Models/Accounts/compte.dart';
-
+import 'package:project_integre/Core/Database/Models/compte.dart';
 import 'users_controller.dart';
 
 class AuthController {

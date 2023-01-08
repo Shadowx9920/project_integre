@@ -79,4 +79,24 @@ class ReunionController {
     }
     return const Stream.empty();
   }
+
+  static Future<List<Reunion>> getReunionFuture() async {
+    List<Reunion> reunion = [];
+    try {
+      await FirebaseFirestore.instance
+          .collection('reunion')
+          .get()
+          .then((value) {
+        for (var element in value.docs) {
+          reunion.add(Reunion.fromJson(element.data()));
+        }
+      });
+      return reunion;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return [];
+  }
 }

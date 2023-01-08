@@ -14,7 +14,7 @@ class EmailService {
       required String subject,
       required String body}) async {
     final Uri uri = Uri.parse(url);
-    final response = await http.post(
+    await http.post(
       uri,
       headers: {
         'Content-Type': 'application/json',

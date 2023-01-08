@@ -1,10 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../Models/Accounts/compte.dart';
+import '../Models/compte.dart';
 
 class UsersController {
+  static Compte? currentUser;
   static Future<bool> checkIfUserExists(String email) async {
     bool userExists = false;
     try {
@@ -18,6 +18,24 @@ class UsersController {
         }
       });
       return userExists;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  static Future<bool> setCurrentAccount(String uid) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get()
+          .then((value) {
+        currentUser = Compte.fromJson(value.data()!);
+      });
+      return true;
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -105,6 +123,23 @@ class UsersController {
       }
     }
     return const Stream.empty();
+  }
+
+  static Future<List<Compte>> getAllAcountsFuture() async {
+    List<Compte> comptes = [];
+    try {
+      await FirebaseFirestore.instance.collection('users').get().then((value) {
+        for (var element in value.docs) {
+          comptes.add(Compte.fromJson(element.data()));
+        }
+      });
+      return comptes;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return [];
   }
 
   static Future<bool> changeAccountType(String uid, int type) async {

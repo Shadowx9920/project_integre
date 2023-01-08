@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:prefs/prefs.dart';
-import 'package:project_integre/Core/Database/Controllers/etablissement_controller.dart';
-import 'Core/Database/Models/etablissement.dart';
 import 'firebase_options.dart';
 
 import 'Android/main_android_app.dart';

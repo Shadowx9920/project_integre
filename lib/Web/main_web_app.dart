@@ -32,9 +32,7 @@ class _MainWebAppState extends State<MainWebApp> {
       initialRoute: "/",
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
-          builder: (context) => ErrorPage(
-            routeName: settings.name ?? "/Unknown",
-          ),
+          builder: (context) => const ErrorPage(),
         );
       },
     );
