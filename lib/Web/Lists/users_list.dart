@@ -1,16 +1,15 @@
 import 'dart:math';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project_integre/Core/Shared/toast_utils.dart';
 import 'package:searchbar_animation/searchbar_animation.dart';
 
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
+import '../../Core/Shared/emails_service.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class UsersListPage extends StatelessWidget {
@@ -49,6 +48,7 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
+  late TextEditingController searchController;
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController passwordController;
@@ -58,6 +58,7 @@ class _UsersListState extends State<UsersList> {
 
   @override
   void initState() {
+    searchController = TextEditingController();
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
@@ -67,6 +68,7 @@ class _UsersListState extends State<UsersList> {
 
   @override
   void dispose() {
+    searchController.dispose();
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -77,24 +79,21 @@ class _UsersListState extends State<UsersList> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
       child: Column(
         children: [
           _buildSearchBar(size),
+          const SizedBox(height: 10),
           Expanded(
             child: ScrollableWidget(
-              child: Wrap(
-                spacing: 10,
-                children: [
-                  if (searchQuery.isEmpty)
-                    for (Compte compte in widget.data)
-                      ProfileCard(size: size, compte: compte),
-                  if (searchQuery.isNotEmpty)
-                    for (Compte compte in widget.data)
-                      if (compte.name.toLowerCase().contains(searchQuery) ||
-                          compte.email.toLowerCase().contains(searchQuery))
-                        ProfileCard(size: size, compte: compte),
-                ],
+              child: SizedBox(
+                width: size.width,
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  children: _wrapHelper(
+                      widget.data, searchQuery, dropdownValue, size),
+                ),
               ),
             ),
           ),
@@ -109,13 +108,29 @@ class _UsersListState extends State<UsersList> {
     );
   }
 
+  _wrapHelper(
+      List<Compte> data, String searchQuery, int selectedType, Size size) {
+    List<Widget> list = [];
+    for (int i = 0; i < data.length; i++) {
+      if (data[i].name.toLowerCase().contains(searchQuery) ||
+          data[i].email.toLowerCase().contains(searchQuery)) {
+        if (selectedType == 4) {
+          list.add(ProfileCard(size: size, compte: data[i]));
+        } else if (data[i].accType == selectedType) {
+          list.add(ProfileCard(size: size, compte: data[i]));
+        }
+      }
+    }
+    return list;
+  }
+
   _buildSearchBar(Size size) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SearchBarAnimation(
-          textEditingController: TextEditingController(),
+          textEditingController: searchController,
           isOriginalAnimation: false,
           buttonBorderColour: Colors.black45,
           buttonWidget: const Icon(Icons.search),
@@ -134,7 +149,7 @@ class _UsersListState extends State<UsersList> {
           },
         ),
         SizedBox(
-          width: size.width * 0.2,
+          width: size.width * 0.15,
           child: DropdownButtonFormField(
             decoration: InputDecoration(
               isDense: true,
@@ -185,119 +200,133 @@ class _UsersListState extends State<UsersList> {
   _buildButtons() {
     return [
       const Spacer(),
+      ElevatedButton(
+        child: const Text("Add from file"),
+        onPressed: () {},
+      ),
       const SizedBox(width: 10),
       ElevatedButton(
         child: const Text("Add Account"),
-        onPressed: () => _addAccount(),
+        onPressed: () {
+          nameController.text = "";
+          emailController.text = "";
+          passwordController.text = "";
+          accType = 0;
+          Get.defaultDialog(
+            title: "Add Account",
+            content: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: nameController,
+                    cursorColor: Theme.of(context).primaryColor,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2.0),
+                      ),
+                      focusColor: Theme.of(context).primaryColor,
+                      contentPadding: const EdgeInsets.all(15),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Name',
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Icon(
+                        Icons.person,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: emailController,
+                    cursorColor: Theme.of(context).primaryColor,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2.0),
+                      ),
+                      focusColor: Theme.of(context).primaryColor,
+                      contentPadding: const EdgeInsets.all(15),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Email',
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: passwordController,
+                    cursorColor: Theme.of(context).primaryColor,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor, width: 2.0),
+                      ),
+                      focusColor: Theme.of(context).primaryColor,
+                      contentPadding: const EdgeInsets.all(15),
+                      border: const OutlineInputBorder(),
+                      labelText: 'Password',
+                      labelStyle:
+                          TextStyle(color: Theme.of(context).primaryColor),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ChipsChoice<int>.single(
+                    value: accType,
+                    onChanged: (int val) => setState(() => accType = val),
+                    choiceItems: C2Choice.listFrom<int, String>(
+                      source: const ['Admin', 'Responsable', 'Prof', 'Student'],
+                      value: (int index, String item) => index,
+                      label: (int index, String item) => item,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Compte newCompte = Compte(
+                    name: nameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                    accType: accType,
+                    id: Random().nextInt(1000000).toString(),
+                  );
+                  UsersController.createAccount(newCompte);
+                  //TODO: uncomment this later
+                  // EmailService.sendEmail(
+                  //   compte: newCompte,
+                  //   subject: 'Account Creation',
+                  //   message: "Your account has been created successfully ! \n"
+                  //       "Your email is : ${newCompte.email} \n"
+                  //       "Your password is : ${newCompte.password} \n",
+                  // );
+                  Get.back();
+                },
+                child: const Text("Save"),
+              ),
+            ],
+          );
+        },
       ),
     ];
-  }
-
-  _addAccount() {
-    nameController.text = "";
-    emailController.text = "";
-    passwordController.text = "";
-    accType = 0;
-    Get.defaultDialog(
-      title: "Add Account",
-      content: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: nameController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                contentPadding: const EdgeInsets.all(15),
-                border: const OutlineInputBorder(),
-                labelText: 'Name',
-                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: emailController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                contentPadding: const EdgeInsets.all(15),
-                border: const OutlineInputBorder(),
-                labelText: 'Email',
-                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: passwordController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                contentPadding: const EdgeInsets.all(15),
-                border: const OutlineInputBorder(),
-                labelText: 'Password',
-                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ChipsChoice<int>.single(
-              value: accType,
-              onChanged: (int val) => setState(() => accType = val),
-              choiceItems: C2Choice.listFrom<int, String>(
-                source: const ['Admin', 'Responsable', 'Prof', 'Student'],
-                value: (int index, String item) => index,
-                label: (int index, String item) => item,
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text("Cancel"),
-        ),
-        TextButton(
-          onPressed: () {
-            UsersController.createAccount(Compte(
-              name: nameController.text,
-              email: emailController.text,
-              password: passwordController.text,
-              accType: accType,
-              id: Random().nextInt(1000000).toString(),
-            ));
-            Get.back();
-          },
-          child: const Text("Save"),
-        ),
-      ],
-    );
   }
 }
 
@@ -341,7 +370,7 @@ class _ProfileCardState extends State<ProfileCard> {
       surfaceTintColor: Theme.of(context).primaryColor,
       elevation: 8,
       child: SizedBox(
-        width: widget.size.width * 0.35,
+        width: widget.size.width * 0.3,
         height: widget.size.height * 0.3,
         child: Stack(
           children: [

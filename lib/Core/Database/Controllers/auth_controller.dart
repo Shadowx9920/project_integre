@@ -6,9 +6,18 @@ import 'users_controller.dart';
 class AuthController {
   static Future<bool> signInUsingEmail(String email, String password) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      return true;
+      bool usersAlreadyCreated =
+          await UsersController.checkIfUserExists(email, password);
+      if (usersAlreadyCreated) {
+        FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+        return true;
+      } else {
+        debugPrint('user not found');
+        return false;
+      }
+      // await FirebaseAuth.instance
+      //     .signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       if (kDebugMode) {
         print(e);

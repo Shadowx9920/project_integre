@@ -1,20 +1,22 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+
+import '../Database/Models/compte.dart';
 
 class EmailService {
   static const String url = 'https://api.emailjs.com/api/v1.0/email/send';
 
-  static const String serviceId = 'service_1j8x9xg';
-  static const String templateId = 'template_1j8x9xg';
-  static const String userId = 'user_1j8x9xg';
+  static const String serviceId = 'service_bwaniep';
+  static const String templateId = 'template_x1tvi3j';
+  static const String userId = 'mwiq7Y19VrWl3ZI4K';
 
-  Future<void> sendEmail(
-      {required String name,
-      required String email,
+  static Future<void> sendEmail(
+      {required Compte compte,
       required String subject,
-      required String body}) async {
+      required String message}) async {
     final Uri uri = Uri.parse(url);
-    await http.post(
+    Response response = await http.post(
       uri,
       headers: {
         'Content-Type': 'application/json',
@@ -25,13 +27,16 @@ class EmailService {
           'template_id': templateId,
           'user_id': userId,
           'template_params': {
-            'name': name,
-            'email': email,
+            'to_name': compte.name,
+            'to_email': compte.email,
             'subject': subject,
-            'body': body,
+            'message': message,
           },
         },
       ),
     );
+    // print response status code and body
+    print(response.statusCode);
+    print(response.body);
   }
 }

@@ -44,6 +44,7 @@ class EtablissementList extends StatefulWidget {
 }
 
 class _EtablissementListState extends State<EtablissementList> {
+  late TextEditingController searchController;
   late TextEditingController nameController;
   late TextEditingController emailController;
   String searchQuery = "";
@@ -53,6 +54,7 @@ class _EtablissementListState extends State<EtablissementList> {
 
   @override
   void initState() {
+    searchController = TextEditingController();
     nameController = TextEditingController();
     emailController = TextEditingController();
     searchControllerForAdding = TextEditingController();
@@ -61,6 +63,7 @@ class _EtablissementListState extends State<EtablissementList> {
 
   @override
   void dispose() {
+    searchController.dispose();
     nameController.dispose();
     emailController.dispose();
     searchControllerForAdding.dispose();
@@ -78,8 +81,9 @@ class _EtablissementListState extends State<EtablissementList> {
           Expanded(
             child: ScrollableWidget(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                 child: Wrap(
+                  alignment: WrapAlignment.center,
                   spacing: 10,
                   children: [
                     if (searchQuery.isEmpty)
@@ -115,22 +119,16 @@ class _EtablissementListState extends State<EtablissementList> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SearchBarAnimation(
+          textEditingController: searchController,
           isOriginalAnimation: false,
           buttonBorderColour: Colors.black45,
           buttonWidget: const Icon(Icons.search),
           secondaryButtonWidget: const Icon(Icons.close),
-          textEditingController: TextEditingController(),
           trailingWidget: const Icon(Icons.search),
           onChanged: (String value) {
             setState(() {
               searchQuery = value;
             });
-          },
-          onEditingComplete: () {
-            debugPrint('onEditingComplete');
-          },
-          onPressButton: (bool? value) {
-            debugPrint('onPressButton');
           },
         ),
       ],
@@ -290,7 +288,7 @@ class _EtablissementCardState extends State<EtablissementCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.size.width * 0.35,
+      width: widget.size.width * 0.3,
       height: widget.size.height * 0.3,
       child: Card(
           child: Stack(
@@ -312,7 +310,19 @@ class _EtablissementCardState extends State<EtablissementCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Responsable: "),
-                  Text(widget.etablissement.idResponsable),
+                  FutureBuilder(
+                    future: UsersController.getAccount(
+                        widget.etablissement.idResponsable),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data.name);
+                      } else if (snapshot.hasError) {
+                        return const Text("Error");
+                      } else {
+                        return const Text("Loading");
+                      }
+                    },
+                  ),
                 ],
               ),
               const Spacer(),
@@ -404,10 +414,11 @@ class _EtablissementCardState extends State<EtablissementCard> {
                     searchController: searchControllerForModifying,
                     items: [
                       for (Compte user in snapshot.data)
-                        DropdownMenuItem(
-                          value: user,
-                          child: Text(user.name),
-                        )
+                        if (user.accType == 1)
+                          DropdownMenuItem(
+                            value: user,
+                            child: Text(user.name),
+                          )
                     ],
                     onChanged: (value) => setState(() {
                       selectedUser = value;

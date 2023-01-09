@@ -5,12 +5,13 @@ import '../Models/compte.dart';
 
 class UsersController {
   static Compte? currentUser;
-  static Future<bool> checkIfUserExists(String email) async {
+  static Future<bool> checkIfUserExists(String email, String password) async {
     bool userExists = false;
     try {
       await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: email)
+          .where('password', isEqualTo: password)
           .get()
           .then((value) {
         if (value.docs.isNotEmpty) {
