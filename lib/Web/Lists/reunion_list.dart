@@ -4,7 +4,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../Core/Database/Controllers/reunion_controller.dart';
 import '../../Core/Database/Models/reunion.dart';
-import '../Views/add_reunion_page.dart';
+import '../ControlPopUps/add_reunion_page.dart';
+import '../ControlPopUps/modify_reunion_page.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class ReunionListPage extends StatelessWidget {
@@ -49,9 +50,11 @@ class _ReunionListState extends State<ReunionList> {
 
     for (var r in reunions) {
       meetings.add(Appointment(
+          id: r.uid,
           startTime: r.date,
           endTime: r.date.add(const Duration(hours: 2)),
           subject: r.subject,
+          // ignore: use_build_context_synchronously
           color: Theme.of(context).primaryColor,
           isAllDay: false));
     }
@@ -74,6 +77,53 @@ class _ReunionListState extends State<ReunionList> {
                       view: CalendarView.schedule,
                       dataSource:
                           ReunionDataSource(snapshot.data as List<Appointment>),
+                      onTap: (details) {
+                        // Appointment tappedAppointment;
+                        // tappedAppointment = details.appointments![0];
+                      },
+                      appointmentBuilder: (BuildContext context,
+                          CalendarAppointmentDetails details) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(4)),
+                          ),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 10),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(details.appointments.first.subject),
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                splashRadius: 10,
+                                icon: const Icon(Icons.edit),
+                                onPressed: () async {
+                                  Reunion? reunion =
+                                      await ReunionController.getReunion(
+                                          details.appointments.first.id);
+                                  Get.to(() => ModifyReunionPage(
+                                        reunion: reunion!,
+                                      ));
+                                },
+                              ),
+                              IconButton(
+                                splashRadius: 10,
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  setState(() {
+                                    ReunionController.deleteReunion(
+                                        details.appointments.first.id);
+                                  });
+                                },
+                              ),
+                              const SizedBox(width: 25),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   );
                 } else if (snapshot.hasError) {

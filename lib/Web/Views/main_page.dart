@@ -5,6 +5,7 @@ import '../../Core/Database/Controllers/users_controller.dart';
 import '../Lists/etablissement_list.dart';
 import '../Lists/reunion_list.dart';
 import '../Lists/users_list.dart';
+import '../Widgets/dashboard.dart';
 import '../Widgets/header_title.dart';
 import '../Widgets/profile_widget.dart';
 import '../Widgets/settings_widget.dart';
@@ -19,9 +20,7 @@ class MainWebPage extends StatefulWidget {
 
 class _MainWebPageState extends State<MainWebPage> {
   final List<Widget> _pages = const [
-    Center(
-      child: Text("Home"),
-    ),
+    DashBoard(),
     UsersListPage(),
     EtablissementListPage(),
     ReunionListPage(),
@@ -34,28 +33,6 @@ class _MainWebPageState extends State<MainWebPage> {
   void initState() {
     _currentPage = _pages[0];
     super.initState();
-  }
-
-  Widget _buildHeader(Size size, int accType) {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      height: size.height * 0.07,
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            'assets/images/logo-UIR.png',
-            height: 50,
-            width: 50,
-          ),
-          const Spacer(),
-          ..._buildHeaderTabs(accType)
-        ],
-      ),
-    );
   }
 
   @override
@@ -71,7 +48,21 @@ class _MainWebPageState extends State<MainWebPage> {
               children: [
                 Column(
                   children: [
-                    _buildHeader(size, UsersController.currentUser!.accType),
+                    Container(
+                      color: Theme.of(context).primaryColor,
+                      height: size.height * 0.07,
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: Row(
+                        children: [
+                          const Spacer(),
+                          ..._buildHeaderTabs(
+                              UsersController.currentUser!.accType)
+                        ],
+                      ),
+                    ),
                     Expanded(
                       child: AnimatedSwitcher(
                         duration: const Duration(milliseconds: 500),
@@ -168,15 +159,6 @@ class _MainWebPageState extends State<MainWebPage> {
       case 1:
         return [
           HeaderButton(
-            text: "Home",
-            icon: Icons.home,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[0];
-              });
-            },
-          ),
-          HeaderButton(
             text: "Users",
             icon: Icons.people,
             onPressed: () {
@@ -224,23 +206,43 @@ class _MainWebPageState extends State<MainWebPage> {
       case 2:
         return [
           HeaderButton(
-            text: "Home",
-            icon: Icons.home,
+              text: 'Etablissements',
+              onPressed: () {
+                setState(() {
+                  _currentPage = _pages[2];
+                });
+              },
+              icon: Icons.business),
+          HeaderButton(
+            text: "Reunions",
+            icon: Icons.calendar_today,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[0];
+                _currentPage = _pages[3];
               });
             },
           ),
           HeaderButton(
-            text: "Users",
-            icon: Icons.people,
+            text: "Profile",
+            icon: Icons.person,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[1];
+                _currentPage = _pages[4];
               });
             },
           ),
+          HeaderButton(
+            text: "Settings",
+            icon: Icons.settings,
+            onPressed: () {
+              setState(() {
+                _currentPage = _pages[5];
+              });
+            },
+          ),
+        ];
+      case 3:
+        return [
           HeaderButton(
               text: 'Etablissements',
               onPressed: () {

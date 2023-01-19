@@ -11,6 +11,7 @@ Reunion _$ReunionFromJson(Map<String, dynamic> json) => Reunion(
       subject: json['subject'] as String,
       date: DateTime.parse(json['date'] as String),
       profId: json['profId'] as String,
+      idEtablissement: json['idEtablissement'] as String,
       participants: (json['participants'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -21,5 +22,6 @@ Map<String, dynamic> _$ReunionToJson(Reunion instance) => <String, dynamic>{
       'subject': instance.subject,
       'date': instance.date.toIso8601String(),
       'profId': instance.profId,
+      'idEtablissement': instance.idEtablissement,
       'participants': instance.participants,
     };

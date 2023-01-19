@@ -61,7 +61,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value != null && !EmailValidator.validate(value)) {
-                        debugPrint(value);
                         return 'Enter a valid email';
                       }
                       if (value!.isEmpty) {

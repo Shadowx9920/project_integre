@@ -16,6 +16,7 @@ class EmailService {
       required String subject,
       required String message}) async {
     final Uri uri = Uri.parse(url);
+    // ignore: unused_local_variable
     Response response = await http.post(
       uri,
       headers: {
@@ -35,8 +36,5 @@ class EmailService {
         },
       ),
     );
-    // print response status code and body
-    print(response.statusCode);
-    print(response.body);
   }
 }

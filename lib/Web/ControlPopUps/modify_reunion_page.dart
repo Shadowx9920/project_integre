@@ -1,33 +1,38 @@
-import 'dart:math';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../../Core/Database/Controllers/etablissement_controller.dart';
 import '../../Core/Database/Controllers/reunion_controller.dart';
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
+import '../../Core/Database/Models/etablissement.dart';
 import '../../Core/Database/Models/reunion.dart';
 
-class AddReunionPage extends StatefulWidget {
-  const AddReunionPage({super.key});
+class ModifyReunionPage extends StatefulWidget {
+  const ModifyReunionPage({super.key, required this.reunion});
+
+  final Reunion reunion;
 
   @override
-  State<AddReunionPage> createState() => _AddReunionPageState();
+  State<ModifyReunionPage> createState() => _ModifyReunionPageState();
 }
 
-class _AddReunionPageState extends State<AddReunionPage> {
+class _ModifyReunionPageState extends State<ModifyReunionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Reunion"),
+        title: const Text("Modify Reunion"),
       ),
       body: FutureBuilder(
         future: UsersController.getAllAcountsFuture(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return InsideFuture(data: snapshot.data as List<Compte>);
+            return InsideFuture(
+              reunion: widget.reunion,
+              data: snapshot.data as List<Compte>,
+            );
           } else if (snapshot.hasError) {
             return const Center(
               child: Text("Error"),
@@ -44,9 +49,10 @@ class _AddReunionPageState extends State<AddReunionPage> {
 }
 
 class InsideFuture extends StatefulWidget {
-  const InsideFuture({super.key, required this.data});
+  const InsideFuture({super.key, required this.data, required this.reunion});
 
   final List<Compte> data;
+  final Reunion reunion;
 
   @override
   State<InsideFuture> createState() => _InsideFutureState();
@@ -54,18 +60,29 @@ class InsideFuture extends StatefulWidget {
 
 class _InsideFutureState extends State<InsideFuture> {
   late TextEditingController subjectController;
+  late TextEditingController dateController;
   DateTime? selectedDate;
   Compte? selectedProfesseur;
+  Etablissement? selectedEtablissement;
   List<String> selectedParticipants = [];
 
   @override
   void initState() {
+    dateController = TextEditingController();
     subjectController = TextEditingController();
+    subjectController.text = widget.reunion.subject;
+    selectedDate = widget.reunion.date;
+    dateController.text = selectedDate.toString();
+    selectedParticipants = widget.reunion.participants;
+    for (Compte element in widget.data) {
+      if (element.id == widget.reunion.profId) selectedProfesseur = element;
+    }
     super.initState();
   }
 
   @override
   void dispose() {
+    dateController.dispose();
     subjectController.dispose();
     super.dispose();
   }
@@ -120,8 +137,9 @@ class _InsideFutureState extends State<InsideFuture> {
                         width: size.width * 0.3,
                         height: size.height * 0.1,
                         child: DateTimePicker(
+                          controller: dateController,
                           type: DateTimePickerType.dateTimeSeparate,
-                          initialDate: DateTime.now(),
+                          initialDate: selectedDate,
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2100),
                           icon: const Icon(Icons.event),
@@ -161,6 +179,43 @@ class _InsideFutureState extends State<InsideFuture> {
                             }),
                           )
                         ],
+                      ),
+                      const SizedBox(height: 20),
+                      FutureBuilder(
+                        future:
+                            EtablissementController.getAllEtablissementFuture(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Row(
+                              children: [
+                                const Text("Etablissement:"),
+                                DropdownButton2(
+                                  hint: const Text("Select Etablissement"),
+                                  value: selectedEtablissement,
+                                  //searchController: searchControllerForAdding,
+                                  items: [
+                                    for (Etablissement etab in snapshot.data!)
+                                      DropdownMenuItem(
+                                        value: etab,
+                                        child: Text(etab.name),
+                                      )
+                                  ],
+                                  onChanged: (value) => setState(() {
+                                    selectedEtablissement = value;
+                                  }),
+                                )
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text("Error"),
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
                       ),
                       const Spacer(),
                       const Text("Participants:"),
@@ -218,18 +273,17 @@ class _InsideFutureState extends State<InsideFuture> {
         const SizedBox(width: 10),
         ElevatedButton(
           onPressed: () {
-            ReunionController.createReunion(Reunion(
-              uid: Random().nextInt(1000000).toString(),
-              subject: subjectController.text.isEmpty
-                  ? "No Subject"
-                  : subjectController.text,
+            ReunionController.updateReunion(Reunion(
+              uid: widget.reunion.uid,
+              subject: subjectController.text,
               date: selectedDate ?? DateTime.now(),
-              profId: selectedProfesseur?.id ?? "",
               participants: selectedParticipants,
+              profId: selectedProfesseur!.id,
+              idEtablissement: selectedEtablissement?.uid ?? "",
             ));
             Navigator.pop(context);
           },
-          child: const Text("Add"),
+          child: const Text("Modify"),
         ),
       ],
     );

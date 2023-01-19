@@ -100,4 +100,19 @@ class EtablissementController {
     }
     return const Stream.empty();
   }
+
+  static Future<List<Etablissement>> getAllEtablissementFuture() async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance.collection('etablissement').get();
+      return querySnapshot.docs
+          .map((doc) => Etablissement.fromJson(doc.data()))
+          .toList();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return [];
+  }
 }

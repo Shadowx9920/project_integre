@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:project_integre/Core/Database/Controllers/auth_controller.dart';
 
@@ -9,11 +8,9 @@ class LoginForm extends StatefulWidget {
     Key? key,
     required this.width,
     required this.height,
-    required this.onClickSignUp,
   }) : super(key: key);
   final double width;
   final double height;
-  final VoidCallback onClickSignUp;
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -108,7 +105,10 @@ class _LoginFormState extends State<LoginForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ElevatedButton(
-                      onPressed: signIn,
+                      onPressed: () {
+                        debugPrint('Login');
+                        signIn();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         textStyle: const TextStyle(
@@ -120,30 +120,12 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                       child: const Text('Login'),
                     ),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Don\'t have an account? ',
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                          TextSpan(
-                            text: 'Sign up',
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                widget.onClickSignUp();
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    AuthController.signInUsingGoogle();
+                    // AuthController.signInUsingGoogle();
                   },
                   child: const GoogleLogo(
                     size: 20,

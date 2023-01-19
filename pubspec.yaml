@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: '>=2.19.0-444.0.dev <3.0.0'
+  sdk: '>=2.18.6 <3.0.0'
 
 dependencies:
   flutter:
@@ -16,6 +16,12 @@ dependencies:
   email_validator: ^2.1.17
   http: ^0.13.5
   get_storage: ^2.0.3
+  excel: ^2.0.1
+  path_provider: ^2.0.11
+  syncfusion_flutter_pdfviewer: ^20.4.43
+  syncfusion_flutter_pdf: ^20.4.44
+  universal_html: ^2.0.8
+  open_file: ^3.2.1
 
   # The following is for database management
   firebase_core: ^2.4.0
@@ -42,7 +48,8 @@ dependencies:
   motion_toast: ^2.6.4
   syncfusion_flutter_calendar: ^20.4.42
   date_time_picker: ^2.1.0
-  excel: ^2.0.1
+  flutter_dropzone: ^3.0.5
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:

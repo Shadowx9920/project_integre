@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:chips_choice/chips_choice.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +7,7 @@ import 'package:searchbar_animation/searchbar_animation.dart';
 
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
-import '../../Core/Shared/emails_service.dart';
+import '../ControlPopUps/users_pop_ups.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class UsersListPage extends StatelessWidget {
@@ -49,19 +47,12 @@ class UsersList extends StatefulWidget {
 
 class _UsersListState extends State<UsersList> {
   late TextEditingController searchController;
-  late TextEditingController nameController;
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  late int accType;
   late int dropdownValue;
   String searchQuery = "";
 
   @override
   void initState() {
     searchController = TextEditingController();
-    nameController = TextEditingController();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
     dropdownValue = 4;
     super.initState();
   }
@@ -69,9 +60,6 @@ class _UsersListState extends State<UsersList> {
   @override
   void dispose() {
     searchController.dispose();
-    nameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -79,7 +67,7 @@ class _UsersListState extends State<UsersList> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
           _buildSearchBar(size),
@@ -91,8 +79,8 @@ class _UsersListState extends State<UsersList> {
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 10,
-                  children: _wrapHelper(
-                      widget.data, searchQuery, dropdownValue, size),
+                  children: _wrapHelper(widget.data, searchQuery, dropdownValue,
+                      UsersController.currentUser!.accType, size),
                 ),
               ),
             ),
@@ -100,7 +88,7 @@ class _UsersListState extends State<UsersList> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
-              children: _buildButtons(),
+              children: _buildButtons(size),
             ),
           ),
         ],
@@ -108,16 +96,28 @@ class _UsersListState extends State<UsersList> {
     );
   }
 
-  _wrapHelper(
-      List<Compte> data, String searchQuery, int selectedType, Size size) {
+  _wrapHelper(List<Compte> data, String searchQuery, int selectedType,
+      int accType, Size size) {
     List<Widget> list = [];
     for (int i = 0; i < data.length; i++) {
       if (data[i].name.toLowerCase().contains(searchQuery) ||
           data[i].email.toLowerCase().contains(searchQuery)) {
         if (selectedType == 4) {
-          list.add(ProfileCard(size: size, compte: data[i]));
+          if (accType == 0) {
+            list.add(ProfileCard(size: size, compte: data[i]));
+          } else {
+            if (data[i].accType != 0) {
+              list.add(ProfileCard(size: size, compte: data[i]));
+            }
+          }
         } else if (data[i].accType == selectedType) {
-          list.add(ProfileCard(size: size, compte: data[i]));
+          if (accType == 0) {
+            list.add(ProfileCard(size: size, compte: data[i]));
+          } else {
+            if (data[i].accType != 0) {
+              list.add(ProfileCard(size: size, compte: data[i]));
+            }
+          }
         }
       }
     }
@@ -164,24 +164,25 @@ class _UsersListState extends State<UsersList> {
             ),
             iconSize: 30,
             value: dropdownValue,
-            items: const [
-              DropdownMenuItem(
-                value: 0,
-                child: Text("Admin"),
-              ),
-              DropdownMenuItem(
-                value: 1,
-                child: Text("Responsable"),
-              ),
-              DropdownMenuItem(
-                value: 2,
-                child: Text("Professeur"),
-              ),
-              DropdownMenuItem(
+            items: [
+              const DropdownMenuItem(
                 value: 3,
                 child: Text("Etudiant"),
               ),
-              DropdownMenuItem(
+              const DropdownMenuItem(
+                value: 2,
+                child: Text("Professeur"),
+              ),
+              const DropdownMenuItem(
+                value: 1,
+                child: Text("Responsable"),
+              ),
+              if (UsersController.currentUser!.accType == 0)
+                const DropdownMenuItem(
+                  value: 0,
+                  child: Text("Admin"),
+                ),
+              const DropdownMenuItem(
                 value: 4,
                 child: Text("Everyone"),
               ),
@@ -197,135 +198,12 @@ class _UsersListState extends State<UsersList> {
     );
   }
 
-  _buildButtons() {
+  _buildButtons(Size size) {
     return [
       const Spacer(),
-      ElevatedButton(
-        child: const Text("Add from file"),
-        onPressed: () {},
-      ),
+      const AddUserFromFile(),
       const SizedBox(width: 10),
-      ElevatedButton(
-        child: const Text("Add Account"),
-        onPressed: () {
-          nameController.text = "";
-          emailController.text = "";
-          passwordController.text = "";
-          accType = 0;
-          Get.defaultDialog(
-            title: "Add Account",
-            content: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: nameController,
-                    cursorColor: Theme.of(context).primaryColor,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2.0),
-                      ),
-                      focusColor: Theme.of(context).primaryColor,
-                      contentPadding: const EdgeInsets.all(15),
-                      border: const OutlineInputBorder(),
-                      labelText: 'Name',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Icon(
-                        Icons.person,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: emailController,
-                    cursorColor: Theme.of(context).primaryColor,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2.0),
-                      ),
-                      focusColor: Theme.of(context).primaryColor,
-                      contentPadding: const EdgeInsets.all(15),
-                      border: const OutlineInputBorder(),
-                      labelText: 'Email',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Icon(
-                        Icons.email,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: passwordController,
-                    cursorColor: Theme.of(context).primaryColor,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor, width: 2.0),
-                      ),
-                      focusColor: Theme.of(context).primaryColor,
-                      contentPadding: const EdgeInsets.all(15),
-                      border: const OutlineInputBorder(),
-                      labelText: 'Password',
-                      labelStyle:
-                          TextStyle(color: Theme.of(context).primaryColor),
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ChipsChoice<int>.single(
-                    value: accType,
-                    onChanged: (int val) => setState(() => accType = val),
-                    choiceItems: C2Choice.listFrom<int, String>(
-                      source: const ['Admin', 'Responsable', 'Prof', 'Student'],
-                      value: (int index, String item) => index,
-                      label: (int index, String item) => item,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Compte newCompte = Compte(
-                    name: nameController.text,
-                    email: emailController.text,
-                    password: passwordController.text,
-                    accType: accType,
-                    id: Random().nextInt(1000000).toString(),
-                  );
-                  UsersController.createAccount(newCompte);
-                  //TODO: uncomment this later
-                  // EmailService.sendEmail(
-                  //   compte: newCompte,
-                  //   subject: 'Account Creation',
-                  //   message: "Your account has been created successfully ! \n"
-                  //       "Your email is : ${newCompte.email} \n"
-                  //       "Your password is : ${newCompte.password} \n",
-                  // );
-                  Get.back();
-                },
-                child: const Text("Save"),
-              ),
-            ],
-          );
-        },
-      ),
+      const AddUser(),
     ];
   }
 }
@@ -473,7 +351,8 @@ class _ProfileCardState extends State<ProfileCard> {
                         ),
                         TextButton(
                           onPressed: () {
-                            UsersController.deleteAccount(widget.compte.id);
+                            UsersController.deleteAccount(
+                                widget.compte.email, widget.compte.password);
                             Get.back();
                           },
                           child: const Text("Delete"),
@@ -565,8 +444,13 @@ class _ProfileCardState extends State<ProfileCard> {
               value: accType,
               onChanged: (int val) => setState(() => accType = val),
               choiceItems: C2Choice.listFrom<int, String>(
-                source: const ['Admin', 'Responsable', 'Prof', 'Student'],
-                value: (int index, String item) => index,
+                source: (UsersController.currentUser!.accType == 0)
+                    ? const ['Admin', 'Responsable', 'Prof', 'Student']
+                    : const ['Responsable', 'Prof', 'Student'],
+                value: (int index, String item) =>
+                    (UsersController.currentUser!.accType == 0)
+                        ? index
+                        : index + 1,
                 label: (int index, String item) => item,
               ),
             ),
@@ -583,6 +467,8 @@ class _ProfileCardState extends State<ProfileCard> {
         TextButton(
           onPressed: () {
             UsersController.updateAccount(
+              compte.email,
+              compte.password,
               Compte(
                 id: compte.id,
                 name: nameController.text,

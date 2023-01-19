@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import '../../Core/Database/Controllers/users_controller.dart';
+import '../../Core/Database/Models/compte.dart';
+import '../../Core/Shared/pdf_service.dart';
 import '../../Core/Shared/rating_service.dart';
 import '../../Core/Shared/theme_service.dart';
 
@@ -57,6 +62,15 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               trailing: const Icon(Icons.arrow_forward_ios),
               onPressed: (context) {
                 showAboutDialog(context: context);
+              },
+            ),
+            SettingsTile.navigation(
+              title: const Text("Download PDF File"),
+              enabled: true,
+              leading: const Icon(Icons.download),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onPressed: (context) async {
+                PdfServiceWeb.createPdfFileWeb();
               },
             ),
           ],

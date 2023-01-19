@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import 'login_form.dart';
-import 'sign_up_form.dart';
 
 class FormsPanel extends StatefulWidget {
   const FormsPanel({
@@ -41,18 +40,10 @@ class _FormsPanelState extends State<FormsPanel> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 350),
-                      reverseDuration: const Duration(milliseconds: 1),
-                      switchInCurve: Curves.fastLinearToSlowEaseIn,
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) =>
-                              ScaleTransition(
-                        scale: animation,
-                        child: child,
-                      ),
-                      child: const SignUpToogle(),
+                  const Expanded(
+                    child: LoginForm(
+                      width: 800,
+                      height: 500,
                     ),
                   ),
                   if (aspectRatio < 0.6)
@@ -78,29 +69,25 @@ class _FormsPanelState extends State<FormsPanel> {
   }
 }
 
-class SignUpToogle extends StatefulWidget {
-  const SignUpToogle({Key? key}) : super(key: key);
+// class SignUpToogle extends StatefulWidget {
+//   const SignUpToogle({Key? key}) : super(key: key);
 
-  @override
-  State<SignUpToogle> createState() => _SignUpToogleState();
-}
+//   @override
+//   State<SignUpToogle> createState() => _SignUpToogleState();
+// }
 
-class _SignUpToogleState extends State<SignUpToogle> {
-  bool isLogin = true;
-  @override
-  Widget build(BuildContext context) => isLogin
-      ? LoginForm(
-          onClickSignUp: toggle,
-          width: 800,
-          height: 500,
-        )
-      : SignUpForm(
-          onClickSignUp: toggle,
-          width: 800,
-          height: 500,
-        );
+// class _SignUpToogleState extends State<SignUpToogle> {
+//   bool isLogin = true;
+//   @override
+//   Widget build(BuildContext context) => isLogin
+//       ? 
+//       : SignUpForm(
+//           onClickSignUp: toggle,
+//           width: 800,
+//           height: 500,
+//         );
 
-  void toggle() {
-    setState(() => isLogin = !isLogin);
-  }
-}
+//   void toggle() {
+//     setState(() => isLogin = !isLogin);
+//   }
+// }

@@ -5,7 +5,6 @@ import '../Core/Shared/theme_colors.dart';
 import '../Core/Shared/theme_service.dart';
 import 'Auth/auth_check.dart';
 import 'Views/error_page.dart';
-import 'Views/main_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 

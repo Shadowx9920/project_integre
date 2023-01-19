@@ -1,9 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../Web/Widgets/profile_widget.dart';
 import '../Widgets/home_widget.dart';
+import '../Widgets/profile_widget.dart';
 import 'settings_page.dart';
 
 class MainAndroidPage extends StatefulWidget {
