@@ -64,15 +64,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 showAboutDialog(context: context);
               },
             ),
-            SettingsTile.navigation(
-              title: const Text("Download PDF File"),
-              enabled: true,
-              leading: const Icon(Icons.download),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onPressed: (context) async {
-                PdfServiceWeb.createPdfFileWeb();
-              },
-            ),
+            if (UsersController.currentUser!.accType == 0)
+              SettingsTile.navigation(
+                title: const Text("Download PDF File"),
+                enabled: true,
+                leading: const Icon(Icons.download),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onPressed: (context) async {
+                  PdfServiceWeb.createPdfFileWeb();
+                },
+              ),
           ],
         ),
       ],

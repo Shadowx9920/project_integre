@@ -5,7 +5,6 @@ import '../../Core/Database/Controllers/users_controller.dart';
 import '../Lists/etablissement_list.dart';
 import '../Lists/reunion_list.dart';
 import '../Lists/users_list.dart';
-import '../Widgets/dashboard.dart';
 import '../Widgets/header_title.dart';
 import '../Widgets/profile_widget.dart';
 import '../Widgets/settings_widget.dart';
@@ -20,7 +19,6 @@ class MainWebPage extends StatefulWidget {
 
 class _MainWebPageState extends State<MainWebPage> {
   final List<Widget> _pages = const [
-    DashBoard(),
     UsersListPage(),
     EtablissementListPage(),
     ReunionListPage(),
