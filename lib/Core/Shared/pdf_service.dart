@@ -4,9 +4,11 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:universal_html/html.dart';
 
 import '../Database/Controllers/etablissement_controller.dart';
+import '../Database/Controllers/reunion_controller.dart';
 import '../Database/Controllers/users_controller.dart';
 import '../Database/Models/compte.dart';
 import '../Database/Models/etablissement.dart';
+import '../Database/Models/reunion.dart';
 
 class PdfServiceWeb {
   static Future<void> _saveAndLaunchFileWeb(
@@ -100,11 +102,28 @@ class PdfServiceWeb {
     reunionsGrid.headers.add(1);
 
     PdfGridRow header3 = reunionsGrid.headers[0];
-    header3.cells[0].value = 'Name';
+    header3.cells[0].value = 'Subject';
     header3.cells[1].value = 'Id';
     header3.cells[2].value = 'Date';
     header3.cells[3].value = 'Etablissement';
     header3.cells[4].value = 'Responsable';
+
+    List<Reunion> reunions = await ReunionController.getReunionFuture();
+
+    for (int i = 0; i < reunions.length; i++) {
+      PdfGridRow row = reunionsGrid.rows.add();
+      row.cells[0].value = reunions[i].subject;
+      row.cells[1].value = reunions[i].uid;
+      row.cells[2].value = reunions[i].date;
+      await EtablissementController.getEtablissement(
+              reunions[i].idEtablissement)
+          .then((value) => row.cells[3].value = value?.name ?? 'null');
+      await UsersController.getAccount(reunions[i].profId)
+          .then((value) => row.cells[4].value = value?.name ?? 'null');
+    }
+
+    reunionsGrid.draw(
+        page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
 
     List<int> bytes = await document.save();
     document.dispose();
