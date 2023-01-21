@@ -10,6 +10,7 @@ import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
 import '../../Core/Database/Models/etablissement.dart';
 import '../../Core/Database/Models/reunion.dart';
+import '../Widgets/custom_text_field.dart';
 
 class AddReunionPage extends StatefulWidget {
   const AddReunionPage({super.key});
@@ -26,10 +27,16 @@ class _AddReunionPageState extends State<AddReunionPage> {
         title: const Text("Add Reunion"),
       ),
       body: FutureBuilder(
-        future: UsersController.getAllAcountsFuture(),
+        future: Future.wait([
+          UsersController.getAllAcountsFuture(),
+          EtablissementController.getAllEtablissementFuture(),
+        ]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return InsideFuture(data: snapshot.data as List<Compte>);
+            return Layout(
+              data: snapshot.data[0] as List<Compte>,
+              etablissements: snapshot.data[1] as List<Etablissement>,
+            );
           } else if (snapshot.hasError) {
             return const Center(
               child: Text("Error"),
@@ -45,16 +52,17 @@ class _AddReunionPageState extends State<AddReunionPage> {
   }
 }
 
-class InsideFuture extends StatefulWidget {
-  const InsideFuture({super.key, required this.data});
+class Layout extends StatefulWidget {
+  const Layout({super.key, required this.data, required this.etablissements});
 
   final List<Compte> data;
+  final List<Etablissement> etablissements;
 
   @override
-  State<InsideFuture> createState() => _InsideFutureState();
+  State<Layout> createState() => _LayoutState();
 }
 
-class _InsideFutureState extends State<InsideFuture> {
+class _LayoutState extends State<Layout> {
   late TextEditingController subjectController;
   DateTime? selectedDate;
   Compte? selectedProfesseur;
@@ -94,26 +102,12 @@ class _InsideFutureState extends State<InsideFuture> {
                       const SizedBox(height: 20),
                       SizedBox(
                         width: size.width * 0.3,
-                        child: TextField(
+                        child: CustomTextField(
                           controller: subjectController,
-                          cursorColor: Theme.of(context).primaryColor,
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2.0),
-                            ),
-                            focusColor: Theme.of(context).primaryColor,
-                            contentPadding: const EdgeInsets.all(15),
-                            border: const OutlineInputBorder(),
-                            labelText: 'Subject',
-                            labelStyle: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                            prefixIcon: Icon(
-                              Icons.subject,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
+                          icon: Icons.subject,
+                          labelText: "Subject",
+                          hintText: "Subject",
+                          obscureText: false,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -166,42 +160,25 @@ class _InsideFutureState extends State<InsideFuture> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      FutureBuilder(
-                        future:
-                            EtablissementController.getAllEtablissementFuture(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Row(
-                              children: [
-                                const Text("Etablissement:"),
-                                DropdownButton2(
-                                  hint: const Text("Select Etablissement"),
-                                  value: selectedEtablissement,
-                                  //searchController: searchControllerForAdding,
-                                  items: [
-                                    for (Etablissement etab
-                                        in snapshot.data as List)
-                                      DropdownMenuItem(
-                                        value: etab,
-                                        child: Text(etab.name),
-                                      )
-                                  ],
-                                  onChanged: (value) => setState(() {
-                                    selectedEtablissement = value;
-                                  }),
+                      Row(
+                        children: [
+                          const Text("Etablissement:"),
+                          DropdownButton2(
+                            hint: const Text("Select Etablissement"),
+                            value: selectedEtablissement,
+                            //searchController: searchControllerForAdding,
+                            items: [
+                              for (Etablissement etab in widget.etablissements)
+                                DropdownMenuItem(
+                                  value: etab,
+                                  child: Text(etab.name),
                                 )
-                              ],
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Center(
-                              child: Text("Error"),
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
+                            ],
+                            onChanged: (value) => setState(() {
+                              selectedEtablissement = value;
+                            }),
+                          )
+                        ],
                       ),
                       const Spacer(),
                       const Text("Participants:"),

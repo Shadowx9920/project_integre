@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:searchbar_animation/searchbar_animation.dart';
 import '../../Core/Database/Controllers/etablissement_controller.dart';
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/etablissement.dart';
-import '../ControlPopUps/etablissement_pop_ups.dart';
+import '../ControlPages/add_etablissement_page.dart';
+import '../ControlPages/modify_etablissement_page.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class EtablissementListPage extends StatelessWidget {
@@ -123,7 +125,13 @@ class _EtablissementListState extends State<EtablissementList> {
   }
 
   _buildButtons() {
-    return [const Spacer(), const AddEtablissement()];
+    return [
+      const Spacer(),
+      ElevatedButton(
+        child: const Text("Add Etablissement"),
+        onPressed: () => Get.to(const AddEtablissementPage()),
+      )
+    ];
   }
 }
 
@@ -185,7 +193,13 @@ class _EtablissementCardState extends State<EtablissementCard> {
             right: 0,
             child: Row(
               children: [
-                ModifyEtablissement(etablissement: widget.etablissement),
+                IconButton(
+                  splashRadius: 10,
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => Get.to(ModifyEtablissementPage(
+                    etablissement: widget.etablissement,
+                  )),
+                ),
                 IconButton(
                   splashRadius: 10,
                   onPressed: () {

@@ -4,8 +4,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../Core/Database/Controllers/reunion_controller.dart';
 import '../../Core/Database/Models/reunion.dart';
-import '../ControlPopUps/add_reunion_page.dart';
-import '../ControlPopUps/modify_reunion_page.dart';
+import '../ControlPages/add_reunion_page.dart';
+import '../ControlPages/modify_reunion_page.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class ReunionListPage extends StatelessWidget {

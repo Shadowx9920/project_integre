@@ -7,7 +7,10 @@ import 'package:searchbar_animation/searchbar_animation.dart';
 
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
+import '../ControlPages/add_user_page.dart';
+import '../ControlPages/modify_user_page.dart';
 import '../ControlPopUps/users_pop_ups.dart';
+import '../Widgets/custom_text_field.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class UsersListPage extends StatelessWidget {
@@ -203,7 +206,9 @@ class _UsersListState extends State<UsersList> {
       const Spacer(),
       const AddUserFromFile(),
       const SizedBox(width: 10),
-      const AddUser(),
+      ElevatedButton(
+          onPressed: () => Get.to(const AddUserPage()),
+          child: const Text("Add User")),
     ];
   }
 }
@@ -221,26 +226,6 @@ class ProfileCard extends StatefulWidget {
 
 class _ProfileCardState extends State<ProfileCard> {
   bool _passwordsVisible = false;
-  late TextEditingController nameController;
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  late int accType;
-
-  @override
-  void initState() {
-    nameController = TextEditingController();
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +314,7 @@ class _ProfileCardState extends State<ProfileCard> {
                 IconButton(
                   splashRadius: 10,
                   icon: const Icon(Icons.edit),
-                  onPressed: () => _editAccount(widget.compte),
+                  onPressed: () => Get.to(ModifyUserPage(user: widget.compte)),
                 ),
                 IconButton(
                   splashRadius: 10,
@@ -366,122 +351,6 @@ class _ProfileCardState extends State<ProfileCard> {
           ],
         ),
       ),
-    );
-  }
-
-  _editAccount(Compte compte) {
-    nameController.text = compte.name;
-    emailController.text = compte.email;
-    passwordController.text = compte.password;
-    accType = compte.accType;
-    Get.defaultDialog(
-      title: "Edit Account",
-      content: Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: nameController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                contentPadding: const EdgeInsets.all(15),
-                border: const OutlineInputBorder(),
-                labelText: 'Name',
-                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: emailController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                contentPadding: const EdgeInsets.all(15),
-                border: const OutlineInputBorder(),
-                labelText: 'Email',
-                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: passwordController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0),
-                ),
-                focusColor: Theme.of(context).primaryColor,
-                contentPadding: const EdgeInsets.all(15),
-                border: const OutlineInputBorder(),
-                labelText: 'Password',
-                labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ChipsChoice<int>.single(
-              value: accType,
-              onChanged: (int val) => setState(() => accType = val),
-              choiceItems: C2Choice.listFrom<int, String>(
-                source: (UsersController.currentUser!.accType == 0)
-                    ? const ['Admin', 'Responsable', 'Prof', 'Student']
-                    : const ['Responsable', 'Prof', 'Student'],
-                value: (int index, String item) =>
-                    (UsersController.currentUser!.accType == 0)
-                        ? index
-                        : index + 1,
-                label: (int index, String item) => item,
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: const Text("Cancel"),
-        ),
-        TextButton(
-          onPressed: () {
-            UsersController.updateAccount(
-              compte.email,
-              compte.password,
-              Compte(
-                id: compte.id,
-                name: nameController.text,
-                email: emailController.text,
-                password: passwordController.text,
-                accType: accType,
-              ),
-            );
-            Get.back();
-          },
-          child: const Text("Save"),
-        ),
-      ],
     );
   }
 }

@@ -113,18 +113,21 @@ class UsersController {
   }
 
   static Future<Compte?> getAccount(String uid) async {
-    DocumentSnapshot? documentSnapshot;
+    QuerySnapshot? querySnapshot;
     try {
-      documentSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('id', isEqualTo: uid)
+          .get();
     } catch (e) {
       if (kDebugMode) {
         print(e);
         return null;
       }
     }
-    if (documentSnapshot != null && documentSnapshot.exists) {
-      return Compte.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+    if (querySnapshot != null && querySnapshot.docs.isNotEmpty) {
+      return Compte.fromJson(
+          querySnapshot.docs.first.data() as Map<String, dynamic>);
     }
     return null;
   }

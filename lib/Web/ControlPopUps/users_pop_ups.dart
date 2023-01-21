@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
+import '../Widgets/custom_text_field.dart';
 
 class AddUser extends StatefulWidget {
   const AddUser({super.key});
@@ -51,67 +52,28 @@ class _AddUserState extends State<AddUser> {
             padding: const EdgeInsets.all(25.0),
             child: Column(
               children: [
-                TextFormField(
+                CustomTextField(
                   controller: nameController,
-                  cursorColor: Theme.of(context).primaryColor,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
-                    ),
-                    focusColor: Theme.of(context).primaryColor,
-                    contentPadding: const EdgeInsets.all(15),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Name',
-                    labelStyle:
-                        TextStyle(color: Theme.of(context).primaryColor),
-                    prefixIcon: Icon(
-                      Icons.person,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  hintText: "Name",
+                  labelText: "Name",
+                  icon: Icons.person,
+                  obscureText: false,
                 ),
                 const SizedBox(height: 10),
-                TextFormField(
+                CustomTextField(
                   controller: emailController,
-                  cursorColor: Theme.of(context).primaryColor,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
-                    ),
-                    focusColor: Theme.of(context).primaryColor,
-                    contentPadding: const EdgeInsets.all(15),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Email',
-                    labelStyle:
-                        TextStyle(color: Theme.of(context).primaryColor),
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  hintText: "Email",
+                  labelText: "Email",
+                  icon: Icons.email,
+                  obscureText: false,
                 ),
                 const SizedBox(height: 10),
-                TextFormField(
+                CustomTextField(
                   controller: passwordController,
-                  cursorColor: Theme.of(context).primaryColor,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor, width: 2.0),
-                    ),
-                    focusColor: Theme.of(context).primaryColor,
-                    contentPadding: const EdgeInsets.all(15),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Password',
-                    labelStyle:
-                        TextStyle(color: Theme.of(context).primaryColor),
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  hintText: "Password",
+                  labelText: "Password",
+                  icon: Icons.lock,
+                  obscureText: true,
                 ),
                 const SizedBox(height: 10),
                 ChipsChoice<int>.single(

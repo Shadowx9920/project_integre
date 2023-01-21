@@ -19,6 +19,7 @@ class RatingService {
         {
           'uid': user.uid,
           'rating': _rating,
+          'timestamp': Timestamp.now(),
         },
       );
 
@@ -83,5 +84,34 @@ class RatingService {
         );
       },
     );
+  }
+
+  static Future<Map<double, DateTime>> getRatingsFuture() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        return {};
+      }
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('ratings')
+              .where('uid', isEqualTo: user.uid)
+              .get();
+
+      Map<double, DateTime> ratings = {};
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in querySnapshot.docs) {
+        ratings[document.data()['rating'] as double] =
+            (document.data()['timestamp'] as Timestamp).toDate();
+      }
+
+      return ratings;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return {};
   }
 }

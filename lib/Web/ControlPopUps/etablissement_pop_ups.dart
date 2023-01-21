@@ -6,6 +6,7 @@ import '../../Core/Database/Controllers/etablissement_controller.dart';
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
 import '../../Core/Database/Models/etablissement.dart';
+import '../Widgets/custom_text_field.dart';
 
 class AddEtablissement extends StatefulWidget {
   const AddEtablissement({super.key});
@@ -51,48 +52,20 @@ class _AddEtablissementState extends State<AddEtablissement> {
               if (snapshot.hasData) {
                 return Column(
                   children: [
-                    TextField(
+                    CustomTextField(
                       controller: nameController,
-                      cursorColor: Theme.of(context).primaryColor,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                        ),
-                        focusColor: Theme.of(context).primaryColor,
-                        contentPadding: const EdgeInsets.all(15),
-                        border: const OutlineInputBorder(),
-                        labelText: 'Name',
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                        prefixIcon: Icon(
-                          Icons.business,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      icon: Icons.business,
+                      labelText: "Name",
+                      hintText: "Enter Name",
+                      obscureText: false,
                     ),
                     const SizedBox(height: 10),
-                    TextField(
+                    CustomTextField(
                       controller: emailController,
-                      cursorColor: Theme.of(context).primaryColor,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                        ),
-                        focusColor: Theme.of(context).primaryColor,
-                        contentPadding: const EdgeInsets.all(15),
-                        border: const OutlineInputBorder(),
-                        labelText: 'Email',
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      icon: Icons.email,
+                      obscureText: false,
+                      hintText: 'Email',
+                      labelText: 'Email',
                     ),
                     const SizedBox(height: 10),
                     DropdownButton2(
@@ -195,48 +168,20 @@ class _ModifyEtablissementState extends State<ModifyEtablissement> {
                 selectedUser = null;
                 return Column(
                   children: [
-                    TextField(
+                    CustomTextField(
                       controller: nameController,
-                      cursorColor: Theme.of(context).primaryColor,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                        ),
-                        focusColor: Theme.of(context).primaryColor,
-                        contentPadding: const EdgeInsets.all(15),
-                        border: const OutlineInputBorder(),
-                        labelText: 'Name',
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                        prefixIcon: Icon(
-                          Icons.business,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      icon: Icons.business,
+                      labelText: "Name",
+                      hintText: "Enter Name",
+                      obscureText: false,
                     ),
                     const SizedBox(height: 10),
-                    TextField(
+                    CustomTextField(
                       controller: emailController,
-                      cursorColor: Theme.of(context).primaryColor,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                              width: 2.0),
-                        ),
-                        focusColor: Theme.of(context).primaryColor,
-                        contentPadding: const EdgeInsets.all(15),
-                        border: const OutlineInputBorder(),
-                        labelText: 'Email',
-                        labelStyle:
-                            TextStyle(color: Theme.of(context).primaryColor),
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
+                      icon: Icons.email,
+                      obscureText: false,
+                      hintText: 'Email',
+                      labelText: 'Email',
                     ),
                     const SizedBox(height: 10),
                     DropdownButton2(
@@ -275,6 +220,7 @@ class _ModifyEtablissementState extends State<ModifyEtablissement> {
           TextButton(
             onPressed: () {
               EtablissementController.updateEtablissement(Etablissement(
+                uid: widget.etablissement.uid,
                 name: nameController.text,
                 idResponsable: selectedUser!.id,
                 email: emailController.text,
