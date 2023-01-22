@@ -24,6 +24,7 @@ class _AddReunionPageState extends State<AddReunionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Add Reunion"),
       ),
       body: FutureBuilder(

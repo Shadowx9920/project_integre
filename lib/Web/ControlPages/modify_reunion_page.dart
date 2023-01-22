@@ -24,6 +24,7 @@ class _ModifyReunionPageState extends State<ModifyReunionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Modify Reunion"),
       ),
       body: FutureBuilder(

@@ -48,7 +48,7 @@ class _MainWebPageState extends State<MainWebPage> {
                   children: [
                     Container(
                       color: Theme.of(context).primaryColor,
-                      height: size.height * 0.07,
+                      height: size.height * 0.08,
                       padding: const EdgeInsets.only(
                         left: 10,
                         right: 10,
@@ -101,8 +101,8 @@ class _MainWebPageState extends State<MainWebPage> {
       case 0:
         return [
           HeaderButton(
-            text: "Home",
-            icon: Icons.home,
+            text: "Users",
+            icon: Icons.people,
             onPressed: () {
               setState(() {
                 _currentPage = _pages[0];
@@ -110,19 +110,10 @@ class _MainWebPageState extends State<MainWebPage> {
             },
           ),
           HeaderButton(
-            text: "Users",
-            icon: Icons.people,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[1];
-              });
-            },
-          ),
-          HeaderButton(
               text: 'Etablissements',
               onPressed: () {
                 setState(() {
-                  _currentPage = _pages[2];
+                  _currentPage = _pages[1];
                 });
               },
               icon: Icons.business),
@@ -131,7 +122,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.calendar_today,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[3];
+                _currentPage = _pages[2];
               });
             },
           ),
@@ -140,7 +131,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.person,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[4];
+                _currentPage = _pages[3];
               });
             },
           ),
@@ -149,7 +140,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.settings,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[5];
+                _currentPage = _pages[4];
               });
             },
           ),
@@ -161,7 +152,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.people,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[1];
+                _currentPage = _pages[0];
               });
             },
           ),
@@ -169,7 +160,7 @@ class _MainWebPageState extends State<MainWebPage> {
               text: 'Etablissements',
               onPressed: () {
                 setState(() {
-                  _currentPage = _pages[2];
+                  _currentPage = _pages[1];
                 });
               },
               icon: Icons.business),
@@ -178,7 +169,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.calendar_today,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[3];
+                _currentPage = _pages[2];
               });
             },
           ),
@@ -187,7 +178,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.person,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[4];
+                _currentPage = _pages[3];
               });
             },
           ),
@@ -196,7 +187,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.settings,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[5];
+                _currentPage = _pages[4];
               });
             },
           ),
@@ -207,7 +198,7 @@ class _MainWebPageState extends State<MainWebPage> {
               text: 'Etablissements',
               onPressed: () {
                 setState(() {
-                  _currentPage = _pages[2];
+                  _currentPage = _pages[1];
                 });
               },
               icon: Icons.business),
@@ -216,7 +207,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.calendar_today,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[3];
+                _currentPage = _pages[2];
               });
             },
           ),
@@ -225,7 +216,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.person,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[4];
+                _currentPage = _pages[3];
               });
             },
           ),
@@ -234,7 +225,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.settings,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[5];
+                _currentPage = _pages[4];
               });
             },
           ),
@@ -245,7 +236,7 @@ class _MainWebPageState extends State<MainWebPage> {
               text: 'Etablissements',
               onPressed: () {
                 setState(() {
-                  _currentPage = _pages[2];
+                  _currentPage = _pages[1];
                 });
               },
               icon: Icons.business),
@@ -254,7 +245,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.calendar_today,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[3];
+                _currentPage = _pages[2];
               });
             },
           ),
@@ -263,7 +254,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.person,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[4];
+                _currentPage = _pages[3];
               });
             },
           ),
@@ -272,7 +263,7 @@ class _MainWebPageState extends State<MainWebPage> {
             icon: Icons.settings,
             onPressed: () {
               setState(() {
-                _currentPage = _pages[5];
+                _currentPage = _pages[4];
               });
             },
           ),

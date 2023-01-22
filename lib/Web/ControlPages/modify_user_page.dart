@@ -45,6 +45,7 @@ class _ModifyUserPageState extends State<ModifyUserPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Add User'),
       ),
       body: Stack(

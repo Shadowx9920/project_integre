@@ -10,6 +10,7 @@ import '../../Core/Database/Models/compte.dart';
 import '../ControlPages/add_user_page.dart';
 import '../ControlPages/modify_user_page.dart';
 import '../ControlPopUps/users_pop_ups.dart';
+import '../Views/user_info_page.dart';
 import '../Widgets/custom_text_field.dart';
 import '../Widgets/scrollable_widget.dart';
 
@@ -310,44 +311,61 @@ class _ProfileCardState extends State<ProfileCard> {
             Positioned(
               bottom: 0,
               right: 0,
-              child: Row(children: [
-                IconButton(
-                  splashRadius: 10,
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => Get.to(ModifyUserPage(user: widget.compte)),
-                ),
-                IconButton(
-                  splashRadius: 10,
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    Get.defaultDialog(
-                      title: "Delete Account",
-                      content: const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                            "Are you sure you want to delete this account?"),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: const Text("Cancel"),
+              child: Row(
+                children: [
+                  IconButton(
+                    splashRadius: 10,
+                    icon: const Icon(Icons.edit),
+                    onPressed: () =>
+                        Get.to(ModifyUserPage(user: widget.compte)),
+                  ),
+                  IconButton(
+                    splashRadius: 10,
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      Get.defaultDialog(
+                        title: "Delete Account",
+                        content: const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text(
+                              "Are you sure you want to delete this account?"),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            UsersController.deleteAccount(
-                                widget.compte.email, widget.compte.password);
-                            Get.back();
-                          },
-                          child: const Text("Delete"),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ]),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              UsersController.deleteAccount(
+                                  widget.compte.email, widget.compte.password);
+                              Get.back();
+                            },
+                            child: const Text("Delete"),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
+            if (UsersController.currentUser!.accType == 0)
+              Positioned(
+                top: 0,
+                left: 0,
+                child: IconButton(
+                  splashRadius: 10,
+                  icon: const Icon(Icons.info),
+                  onPressed: () => Get.to(
+                    () => UserInfoPage(
+                      user: widget.compte,
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

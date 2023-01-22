@@ -162,6 +162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  dotted_border:
+    dependency: "direct main"
+    description:
+      name: dotted_border
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0+3"
   dropdown_button2:
     dependency: "direct main"
     description:
@@ -260,6 +267,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  firebase_storage:
+    dependency: "direct main"
+    description:
+      name: firebase_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "11.0.10"
+  firebase_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_storage_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.26"
+  firebase_storage_web:
+    dependency: transitive
+    description:
+      name: firebase_storage_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.19"
   fl_chart:
     dependency: "direct main"
     description:
@@ -393,14 +421,14 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.6"
+    version: "0.8.6+1"
   image_picker_android:
     dependency: transitive
     description:
       name: image_picker_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+4"
+    version: "0.8.5+5"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -414,7 +442,7 @@ packages:
       name: image_picker_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.6+5"
+    version: "0.8.6+6"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -659,28 +687,28 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.16"
+    version: "2.0.17"
   shared_preferences_android:
     dependency: transitive
     description:
       name: shared_preferences_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.14"
+    version: "2.0.15"
   shared_preferences_foundation:
     dependency: transitive
     description:
       name: shared_preferences_foundation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   shared_preferences_linux:
     dependency: transitive
     description:
       name: shared_preferences_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   shared_preferences_platform_interface:
     dependency: transitive
     description:
@@ -701,7 +729,7 @@ packages:
       name: shared_preferences_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -874,35 +902,35 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.7"
+    version: "6.1.8"
   url_launcher_android:
     dependency: transitive
     description:
       name: url_launcher_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.22"
+    version: "6.0.23"
   url_launcher_ios:
     dependency: transitive
     description:
       name: url_launcher_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.17"
+    version: "6.0.18"
   url_launcher_linux:
     dependency: transitive
     description:
       name: url_launcher_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   url_launcher_macos:
     dependency: transitive
     description:
       name: url_launcher_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   url_launcher_platform_interface:
     dependency: transitive
     description:
@@ -916,14 +944,14 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.13"
+    version: "2.0.14"
   url_launcher_windows:
     dependency: transitive
     description:
       name: url_launcher_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   uuid:
     dependency: transitive
     description:

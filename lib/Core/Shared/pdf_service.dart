@@ -25,13 +25,15 @@ class PdfServiceWeb {
 
     final page = document.pages.add();
 
-    page.graphics
-        .drawString('Rapprt', PdfStandardFont(PdfFontFamily.helvetica, 30));
+    page.graphics.drawString(
+        'Rapprt', PdfStandardFont(PdfFontFamily.helvetica, 30),
+        bounds:
+            Rect.fromCenter(center: const Offset(0, 0), width: 0, height: 0));
 
     //--------------------------------------------------------------------------------
     PdfGrid usersGrid = PdfGrid();
     usersGrid.style = PdfGridStyle(
-        font: PdfStandardFont(PdfFontFamily.helvetica, 16),
+        font: PdfStandardFont(PdfFontFamily.helvetica, 12),
         cellPadding: PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
 
     usersGrid.columns.add(count: 5);
@@ -66,7 +68,7 @@ class PdfServiceWeb {
     //--------------------------------------------------------------------------------
     PdfGrid etablissementsGrid = PdfGrid();
     etablissementsGrid.style = PdfGridStyle(
-        font: PdfStandardFont(PdfFontFamily.helvetica, 16),
+        font: PdfStandardFont(PdfFontFamily.helvetica, 12),
         cellPadding: PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
 
     etablissementsGrid.columns.add(count: 4);
@@ -95,7 +97,7 @@ class PdfServiceWeb {
     //--------------------------------------------------------------------------------
     PdfGrid reunionsGrid = PdfGrid();
     reunionsGrid.style = PdfGridStyle(
-        font: PdfStandardFont(PdfFontFamily.helvetica, 16),
+        font: PdfStandardFont(PdfFontFamily.helvetica, 12),
         cellPadding: PdfPaddings(left: 5, right: 2, top: 2, bottom: 2));
 
     reunionsGrid.columns.add(count: 5);

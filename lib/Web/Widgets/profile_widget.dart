@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
 
 import '../../Core/Database/Controllers/auth_controller.dart';
+import '../Views/user_file_page.dart';
 
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({Key? key}) : super(key: key);
@@ -197,6 +198,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         ],
                       ),
                       const Spacer(),
+                      ElevatedButton(
+                        onPressed: () => Get.to(() => const UserFilesPage()),
+                        child: const Text("Files"),
+                      ),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

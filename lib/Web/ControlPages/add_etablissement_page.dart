@@ -67,6 +67,7 @@ class _LayoutState extends State<Layout> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Ajouter un établissement"),
       ),
       body: Stack(

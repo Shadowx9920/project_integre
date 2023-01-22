@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_integre/Core/Database/Controllers/auth_controller.dart';
 
-import '../../../Core/Shared/google_logo.dart';
-
 class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
@@ -123,14 +121,6 @@ class _LoginFormState extends State<LoginForm> {
                   ],
                 ),
                 const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    // AuthController.signInUsingGoogle();
-                  },
-                  child: const GoogleLogo(
-                    size: 20,
-                  ),
-                )
               ],
             ),
           )
