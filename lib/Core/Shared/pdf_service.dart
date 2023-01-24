@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:ui';
+import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:universal_html/html.dart';
 
@@ -20,15 +20,56 @@ class PdfServiceWeb {
       ..click();
   }
 
+  static Future<List<int>> _readImageData(String path) async {
+    final data = await rootBundle.load(path);
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
   static Future<void> createPdfFileWeb() async {
     PdfDocument document = PdfDocument();
 
     final page = document.pages.add();
 
+    double pageWidth = page.getClientSize().width;
+    double pageHeight = page.getClientSize().height;
+
+    //Center an Image in PDF and make it 4 times smaller
+    final image = PdfBitmap(await _readImageData('assets/images/logo-UIR.png'));
+    page.graphics.drawImage(
+        image,
+        Rect.fromLTWH(pageWidth / 2 - image.width / 8, 0, image.width / 4,
+            image.height / 4));
+
+    //Add a title "Rapport" to the center of the page with a line under it
+    PdfFont font = PdfStandardFont(PdfFontFamily.helvetica, 20);
+    PdfStringFormat format = PdfStringFormat();
+    format.alignment = PdfTextAlignment.center;
+    page.graphics.drawString('Rapport', font,
+        bounds: Rect.fromLTWH(0, pageHeight / 2, pageWidth, 50),
+        format: format);
+
+    //add the current date to the page at the bottom right corner
+    font = PdfStandardFont(PdfFontFamily.helvetica, 12);
+    format = PdfStringFormat();
+    format.alignment = PdfTextAlignment.right;
+    page.graphics.drawString(DateTime.now().toString(), font,
+        bounds: Rect.fromLTWH(0, pageHeight - 50, pageWidth, 50),
+        format: format);
+    //--------------------------------------------------------------------------------
+    List<Compte> users = await UsersController.getAllAcountsFuture();
+    List<Etablissement> etablissements =
+        await EtablissementController.getAllEtablissementFuture();
+    List<Reunion> reunions = await ReunionController.getReunionFuture();
+
+    //add a page that contains the number of users in the database
+    //and the number of etablissements and the number of reunions
+    page.graphics.drawString('Nombre d\'utilisateurs: ${users.length}', font,
+        bounds: Rect.fromLTWH(0, 0, pageWidth, 50), format: format);
     page.graphics.drawString(
-        'Rapprt', PdfStandardFont(PdfFontFamily.helvetica, 30),
-        bounds:
-            Rect.fromCenter(center: const Offset(0, 0), width: 0, height: 0));
+        'Nombre d\'etablissements: ${etablissements.length}', font,
+        bounds: Rect.fromLTWH(0, 50, pageWidth, 50), format: format);
+    page.graphics.drawString('Nombre de reunions: ${reunions.length}', font,
+        bounds: Rect.fromLTWH(0, 100, pageWidth, 50), format: format);
 
     //--------------------------------------------------------------------------------
     PdfGrid usersGrid = PdfGrid();
@@ -41,12 +82,25 @@ class PdfServiceWeb {
 
     PdfGridRow header = usersGrid.headers[0];
     header.cells[0].value = 'Name';
+    header.cells[0].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header.cells[1].value = 'Id';
+    header.cells[1].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header.cells[2].value = 'Email';
+    header.cells[2].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header.cells[3].value = 'Password';
+    header.cells[3].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header.cells[4].value = 'Account Type';
-
-    List<Compte> users = await UsersController.getAllAcountsFuture();
+    header.cells[4].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
 
     for (int i = 0; i < users.length; i++) {
       PdfGridRow row = usersGrid.rows.add();
@@ -58,7 +112,7 @@ class PdfServiceWeb {
           ? 'Admin'
           : (users[i].accType == 1)
               ? 'Responsable'
-              : (users[i].accType == 1)
+              : (users[i].accType == 2)
                   ? 'Professeur'
                   : 'Etudiant';
     }
@@ -76,12 +130,21 @@ class PdfServiceWeb {
 
     PdfGridRow header2 = etablissementsGrid.headers[0];
     header2.cells[0].value = 'Name';
+    header2.cells[0].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header2.cells[1].value = 'Id';
+    header2.cells[1].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header2.cells[2].value = 'Email';
+    header2.cells[2].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header2.cells[3].value = 'Responsable';
-
-    List<Etablissement> etablissements =
-        await EtablissementController.getAllEtablissementFuture();
+    header2.cells[3].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
 
     for (int i = 0; i < etablissements.length; i++) {
       PdfGridRow row = etablissementsGrid.rows.add();
@@ -105,12 +168,25 @@ class PdfServiceWeb {
 
     PdfGridRow header3 = reunionsGrid.headers[0];
     header3.cells[0].value = 'Subject';
+    header3.cells[0].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header3.cells[1].value = 'Id';
+    header3.cells[1].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header3.cells[2].value = 'Date';
+    header3.cells[2].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header3.cells[3].value = 'Etablissement';
+    header3.cells[3].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
     header3.cells[4].value = 'Responsable';
-
-    List<Reunion> reunions = await ReunionController.getReunionFuture();
+    header3.cells[4].style = PdfGridCellStyle(
+        backgroundBrush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        textBrush: PdfSolidBrush(PdfColor(255, 255, 255)));
 
     for (int i = 0; i < reunions.length; i++) {
       PdfGridRow row = reunionsGrid.rows.add();

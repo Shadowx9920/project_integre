@@ -1,4 +1,3 @@
-import 'package:chips_choice/chips_choice.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import '../ControlPages/add_user_page.dart';
 import '../ControlPages/modify_user_page.dart';
 import '../ControlPopUps/users_pop_ups.dart';
 import '../Views/user_info_page.dart';
-import '../Widgets/custom_text_field.dart';
 import '../Widgets/scrollable_widget.dart';
 
 class UsersListPage extends StatelessWidget {
@@ -81,7 +79,7 @@ class _UsersListState extends State<UsersList> {
               child: SizedBox(
                 width: size.width,
                 child: Wrap(
-                  alignment: WrapAlignment.center,
+                  alignment: WrapAlignment.start,
                   spacing: 10,
                   children: _wrapHelper(widget.data, searchQuery, dropdownValue,
                       UsersController.currentUser!.accType, size),
@@ -89,11 +87,8 @@ class _UsersListState extends State<UsersList> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: _buildButtons(size),
-            ),
+          Row(
+            children: _buildButtons(size),
           ),
         ],
       ),
@@ -129,76 +124,83 @@ class _UsersListState extends State<UsersList> {
   }
 
   _buildSearchBar(Size size) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SearchBarAnimation(
-          textEditingController: searchController,
-          isOriginalAnimation: false,
-          buttonBorderColour: Colors.black45,
-          buttonWidget: const Icon(Icons.search),
-          secondaryButtonWidget: const Icon(Icons.close),
-          trailingWidget: const Icon(Icons.search),
-          onChanged: (String value) {
-            setState(() {
-              searchQuery = value;
-            });
-          },
-          onEditingComplete: () {
-            debugPrint('onEditingComplete');
-          },
-          onPressButton: (bool? value) {
-            debugPrint('onPressButton');
-          },
-        ),
-        SizedBox(
-          width: size.width * 0.15,
-          child: DropdownButtonFormField(
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding: const EdgeInsets.all(8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
+    return SizedBox(
+      width: size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: size.width * 0.7,
+            child: SearchBarAnimation(
+              textEditingController: searchController,
+              isOriginalAnimation: false,
+              buttonBorderColour: Colors.black45,
+              buttonWidget: const Icon(Icons.search),
+              secondaryButtonWidget: const Icon(Icons.close),
+              trailingWidget: const Icon(Icons.search),
+              onChanged: (String value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
+              onEditingComplete: () {
+                debugPrint('onEditingComplete');
+              },
+              onPressButton: (bool? value) {
+                debugPrint('onPressButton');
+              },
             ),
-            icon: const Icon(
-              Icons.arrow_drop_down,
-              color: Colors.black45,
-            ),
-            iconSize: 30,
-            value: dropdownValue,
-            items: [
-              const DropdownMenuItem(
-                value: 3,
-                child: Text("Etudiant"),
-              ),
-              const DropdownMenuItem(
-                value: 2,
-                child: Text("Professeur"),
-              ),
-              const DropdownMenuItem(
-                value: 1,
-                child: Text("Responsable"),
-              ),
-              if (UsersController.currentUser!.accType == 0)
-                const DropdownMenuItem(
-                  value: 0,
-                  child: Text("Admin"),
-                ),
-              const DropdownMenuItem(
-                value: 4,
-                child: Text("Everyone"),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                dropdownValue = value as int;
-              });
-            },
           ),
-        ),
-      ],
+          const Spacer(),
+          SizedBox(
+            width: size.width * 0.15,
+            child: DropdownButtonFormField(
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: const EdgeInsets.all(8),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              icon: const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.black45,
+              ),
+              iconSize: 30,
+              value: dropdownValue,
+              items: [
+                const DropdownMenuItem(
+                  value: 3,
+                  child: Text("Etudiant"),
+                ),
+                const DropdownMenuItem(
+                  value: 2,
+                  child: Text("Professeur"),
+                ),
+                const DropdownMenuItem(
+                  value: 1,
+                  child: Text("Responsable"),
+                ),
+                if (UsersController.currentUser!.accType == 0)
+                  const DropdownMenuItem(
+                    value: 0,
+                    child: Text("Admin"),
+                  ),
+                const DropdownMenuItem(
+                  value: 4,
+                  child: Text("Everyone"),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  dropdownValue = value as int;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -206,10 +208,11 @@ class _UsersListState extends State<UsersList> {
     return [
       const Spacer(),
       const AddUserFromFile(),
-      const SizedBox(width: 10),
       ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(), padding: const EdgeInsets.all(15)),
           onPressed: () => Get.to(const AddUserPage()),
-          child: const Text("Add User")),
+          child: const Icon(Icons.add)),
     ];
   }
 }
@@ -230,143 +233,139 @@ class _ProfileCardState extends State<ProfileCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      surfaceTintColor: Theme.of(context).primaryColor,
-      elevation: 8,
-      child: SizedBox(
-        width: widget.size.width * 0.3,
-        height: widget.size.height * 0.3,
-        child: Stack(
-          children: [
-            Row(
-              children: [
-                CircularProfileAvatar(
-                  "",
-                  cacheImage: true,
-                  radius: widget.size.height * 0.1,
-                  backgroundColor: Colors.transparent,
-                  borderWidth: 0,
-                  borderColor: Colors.transparent,
-                  child: (FirebaseAuth.instance.currentUser!.photoURL != null)
-                      ? Image.network(
-                          FirebaseAuth.instance.currentUser!.photoURL!)
-                      : Icon(
-                          Icons.person,
-                          size: widget.size.height * 0.1,
-                        ),
-                ),
-                VerticalDivider(
-                  color: Theme.of(context).primaryColor,
-                  thickness: 1,
-                  width: 10,
-                  indent: 15,
-                  endIndent: 15,
-                ),
-                const Spacer(),
-                SizedBox(
-                  height: widget.size.height * 0.25,
-                  child: Column(
-                    children: [
-                      const Spacer(),
-                      Text(widget.compte.email),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Text(_passwordsVisible
-                              ? widget.compte.password
-                              : "************"),
-                          IconButton(
-                            icon: Icon(
-                              !_passwordsVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              size: 20,
-                            ),
-                            splashRadius: 10,
-                            onPressed: () {
-                              setState(() {
-                                _passwordsVisible = !_passwordsVisible;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Text(
-                        (widget.compte.accType == 0)
-                            ? "Admin"
-                            : (widget.compte.accType == 1)
-                                ? "Responsable"
-                                : (widget.compte.accType == 2)
-                                    ? "Professeur"
-                                    : "Etudiant",
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-              ],
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Row(
+    return GestureDetector(
+      onTap: () {
+        if (UsersController.currentUser!.accType == 0) {
+          Get.to(() => UserInfoPage(
+                user: widget.compte,
+              ));
+        }
+      },
+      child: Card(
+        surfaceTintColor: Theme.of(context).primaryColor,
+        elevation: 8,
+        child: SizedBox(
+          width: widget.size.width * 0.3,
+          height: widget.size.height * 0.3,
+          child: Stack(
+            children: [
+              Row(
                 children: [
-                  IconButton(
-                    splashRadius: 10,
-                    icon: const Icon(Icons.edit),
-                    onPressed: () =>
-                        Get.to(ModifyUserPage(user: widget.compte)),
+                  CircularProfileAvatar(
+                    "",
+                    cacheImage: true,
+                    radius: widget.size.height * 0.1,
+                    backgroundColor: Colors.transparent,
+                    borderWidth: 0,
+                    borderColor: Colors.transparent,
+                    child: (FirebaseAuth.instance.currentUser!.photoURL != null)
+                        ? Image.network(
+                            FirebaseAuth.instance.currentUser!.photoURL!)
+                        : Icon(
+                            Icons.person,
+                            size: widget.size.height * 0.1,
+                          ),
                   ),
-                  IconButton(
-                    splashRadius: 10,
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      Get.defaultDialog(
-                        title: "Delete Account",
-                        content: const Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text(
-                              "Are you sure you want to delete this account?"),
+                  VerticalDivider(
+                    color: Theme.of(context).primaryColor,
+                    thickness: 1,
+                    width: 10,
+                    indent: 15,
+                    endIndent: 15,
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    height: widget.size.height * 0.25,
+                    child: Column(
+                      children: [
+                        const Spacer(),
+                        Text(widget.compte.email),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text(_passwordsVisible
+                                ? widget.compte.password
+                                : "************"),
+                            IconButton(
+                              icon: Icon(
+                                !_passwordsVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                size: 20,
+                              ),
+                              splashRadius: 10,
+                              onPressed: () {
+                                setState(() {
+                                  _passwordsVisible = !_passwordsVisible;
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: const Text("Cancel"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              UsersController.deleteAccount(
-                                  widget.compte.email, widget.compte.password);
-                              Get.back();
-                            },
-                            child: const Text("Delete"),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            if (UsersController.currentUser!.accType == 0)
-              Positioned(
-                top: 0,
-                left: 0,
-                child: IconButton(
-                  splashRadius: 10,
-                  icon: const Icon(Icons.info),
-                  onPressed: () => Get.to(
-                    () => UserInfoPage(
-                      user: widget.compte,
+                        const Spacer(),
+                        Text(
+                          (widget.compte.accType == 0)
+                              ? "Admin"
+                              : (widget.compte.accType == 1)
+                                  ? "Responsable"
+                                  : (widget.compte.accType == 2)
+                                      ? "Professeur"
+                                      : "Etudiant",
+                        ),
+                        const Spacer(),
+                      ],
                     ),
                   ),
+                  const Spacer(),
+                ],
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Row(
+                  children: [
+                    IconButton(
+                      splashRadius: 10,
+                      icon: const Icon(Icons.edit),
+                      onPressed: () =>
+                          Get.to(ModifyUserPage(user: widget.compte)),
+                    ),
+                    IconButton(
+                      splashRadius: 10,
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        Get.defaultDialog(
+                          title: "Delete Account",
+                          content: const Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text(
+                                "Are you sure you want to delete this account?"),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                UsersController.deleteAccount(
+                                    widget.compte.email,
+                                    widget.compte.password);
+                                Get.back();
+                              },
+                              child: const Text("Delete"),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );

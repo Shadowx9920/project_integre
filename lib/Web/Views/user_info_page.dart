@@ -20,6 +20,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('User Info'),
+      ),
       body: SizedBox(
         height: size.height,
         width: size.width,
@@ -29,11 +33,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "User Info:",
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               UserInfo(user: widget.user),
               const SizedBox(height: 20),
               const Divider(),

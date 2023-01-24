@@ -5,83 +5,46 @@ import '../../Core/Database/Controllers/users_controller.dart';
 import '../Lists/etablissement_list.dart';
 import '../Lists/reunion_list.dart';
 import '../Lists/users_list.dart';
-import '../Widgets/header_title.dart';
-import '../Widgets/profile_widget.dart';
-import '../Widgets/settings_widget.dart';
+import '../Pages/dashboard.dart';
+import '../Pages/profile_widget.dart';
+import '../Pages/settings_widget.dart';
+import '../Pages/user_files.dart';
+import '../Widgets/side_panel_web.dart';
 import 'error_page.dart';
 
 class MainWebPage extends StatefulWidget {
-  const MainWebPage({super.key});
+  const MainWebPage({Key? key}) : super(key: key);
 
   @override
   State<MainWebPage> createState() => _MainWebPageState();
 }
 
 class _MainWebPageState extends State<MainWebPage> {
-  final List<Widget> _pages = const [
-    UsersListPage(),
-    EtablissementListPage(),
-    ReunionListPage(),
-    ProfileWidget(),
-    SettingsWidget(),
-  ];
-  late Widget _currentPage;
-
-  @override
-  void initState() {
-    _currentPage = _pages[0];
-    super.initState();
-  }
-
+  late List<bool> _isSelected;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return FutureBuilder(
       future: UsersController.setCurrentAccount(
           FirebaseAuth.instance.currentUser!.uid),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          return Scaffold(
-            body: Stack(
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      color: Theme.of(context).primaryColor,
-                      height: size.height * 0.08,
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          ..._buildHeaderTabs(
-                              UsersController.currentUser!.accType)
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        child: _currentPage,
-                      ),
-                    ),
-                  ],
+          _isSelected = List<bool>.filled(7, false);
+          _isSelected[0] = true;
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              bool isPortrait = constraints.maxWidth < constraints.maxHeight;
+              double aspectRatio = isPortrait
+                  ? constraints.maxWidth / constraints.maxHeight
+                  : constraints.maxHeight / constraints.maxWidth;
+              return Scaffold(
+                body: WebSidePanel(
+                  aspectRatio: aspectRatio,
+                  isSelected: _isSelected,
+                  tabData: _buildTabs(UsersController.currentUser!.accType),
+                  tabs: _buildPages(UsersController.currentUser!.accType),
                 ),
-                const Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Copyright \u00A9 Yorastd Company. All rights reserved.',
-                      style: TextStyle(fontSize: 12.0),
-                    ),
-                  ),
-                )
-              ],
-            ),
+              );
+            },
           );
         } else if (snapshot.hasError) {
           return const ErrorPage();
@@ -96,180 +59,89 @@ class _MainWebPageState extends State<MainWebPage> {
     );
   }
 
-  _buildHeaderTabs(int accType) {
+  List<List<Object>> _buildTabs(int accType) {
     switch (accType) {
       case 0:
-        return [
-          HeaderButton(
-            text: "Users",
-            icon: Icons.people,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[0];
-              });
-            },
-          ),
-          HeaderButton(
-              text: 'Etablissements',
-              onPressed: () {
-                setState(() {
-                  _currentPage = _pages[1];
-                });
-              },
-              icon: Icons.business),
-          HeaderButton(
-            text: "Reunions",
-            icon: Icons.calendar_today,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[2];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Profile",
-            icon: Icons.person,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[3];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Settings",
-            icon: Icons.settings,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[4];
-              });
-            },
-          ),
+        return const [
+          [Icons.dashboard_rounded, "DashBoard"],
+          [Icons.group, "Users"],
+          [Icons.business, "Etablissements"],
+          [Icons.calendar_month, "Reunions"],
+          [Icons.folder, "Documents"],
+          [Icons.person, "Profile"],
+          [Icons.settings, "Settings"],
         ];
       case 1:
-        return [
-          HeaderButton(
-            text: "Users",
-            icon: Icons.people,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[0];
-              });
-            },
-          ),
-          HeaderButton(
-              text: 'Etablissements',
-              onPressed: () {
-                setState(() {
-                  _currentPage = _pages[1];
-                });
-              },
-              icon: Icons.business),
-          HeaderButton(
-            text: "Reunions",
-            icon: Icons.calendar_today,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[2];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Profile",
-            icon: Icons.person,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[3];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Settings",
-            icon: Icons.settings,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[4];
-              });
-            },
-          ),
+        return const [
+          [Icons.group, "Users"],
+          [Icons.business, "Etablissements"],
+          [Icons.calendar_month, "Reunions"],
+          [Icons.folder, "Documents"],
+          [Icons.person, "Profile"],
+          [Icons.settings, "Settings"],
         ];
       case 2:
-        return [
-          HeaderButton(
-              text: 'Etablissements',
-              onPressed: () {
-                setState(() {
-                  _currentPage = _pages[1];
-                });
-              },
-              icon: Icons.business),
-          HeaderButton(
-            text: "Reunions",
-            icon: Icons.calendar_today,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[2];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Profile",
-            icon: Icons.person,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[3];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Settings",
-            icon: Icons.settings,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[4];
-              });
-            },
-          ),
+        return const [
+          [Icons.business, "Etablissements"],
+          [Icons.calendar_month, "Reunions"],
+          [Icons.folder, "Documents"],
+          [Icons.person, "Profile"],
+          [Icons.settings, "Settings"],
         ];
       case 3:
-        return [
-          HeaderButton(
-              text: 'Etablissements',
-              onPressed: () {
-                setState(() {
-                  _currentPage = _pages[1];
-                });
-              },
-              icon: Icons.business),
-          HeaderButton(
-            text: "Reunions",
-            icon: Icons.calendar_today,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[2];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Profile",
-            icon: Icons.person,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[3];
-              });
-            },
-          ),
-          HeaderButton(
-            text: "Settings",
-            icon: Icons.settings,
-            onPressed: () {
-              setState(() {
-                _currentPage = _pages[4];
-              });
-            },
-          ),
+        return const [
+          [Icons.calendar_month, "Reunions"],
+          [Icons.folder, "Documents"],
+          [Icons.person, "Profile"],
+          [Icons.settings, "Settings"],
         ];
       default:
-        return [];
+        return const [
+          [Icons.settings, "Settings"],
+        ];
+    }
+  }
+
+  List<Widget> _buildPages(int accType) {
+    switch (accType) {
+      case 0:
+        return const [
+          DashBoard(),
+          UsersListPage(),
+          EtablissementListPage(),
+          ReunionListPage(),
+          UserFiles(),
+          ProfileWidget(),
+          SettingsWidget(),
+        ];
+      case 1:
+        return const [
+          UsersListPage(),
+          EtablissementListPage(),
+          ReunionListPage(),
+          UserFiles(),
+          ProfileWidget(),
+          SettingsWidget(),
+        ];
+      case 2:
+        return const [
+          EtablissementListPage(),
+          ReunionListPage(),
+          UserFiles(),
+          ProfileWidget(),
+          SettingsWidget(),
+        ];
+      case 3:
+        return const [
+          ReunionListPage(),
+          UserFiles(),
+          ProfileWidget(),
+          SettingsWidget(),
+        ];
+      default:
+        return const [
+          SettingsWidget(),
+        ];
     }
   }
 }

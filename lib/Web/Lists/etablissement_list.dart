@@ -71,31 +71,31 @@ class _EtablissementListState extends State<EtablissementList> {
             child: ScrollableWidget(
               child: Padding(
                 padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 10,
-                  children: [
-                    if (searchQuery.isEmpty)
-                      for (Etablissement etablissement in widget.data)
-                        EtablissementCard(
-                            size: size, etablissement: etablissement),
-                    if (searchQuery.isNotEmpty)
-                      for (Etablissement etablissement in widget.data)
-                        if (etablissement.name.toLowerCase().contains(
-                              searchQuery.toLowerCase(),
-                            ))
+                child: SizedBox(
+                  width: size.width,
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: 10,
+                    children: [
+                      if (searchQuery.isEmpty)
+                        for (Etablissement etablissement in widget.data)
                           EtablissementCard(
-                              size: size, etablissement: etablissement)
-                  ],
+                              size: size, etablissement: etablissement),
+                      if (searchQuery.isNotEmpty)
+                        for (Etablissement etablissement in widget.data)
+                          if (etablissement.name.toLowerCase().contains(
+                                searchQuery.toLowerCase(),
+                              ))
+                            EtablissementCard(
+                                size: size, etablissement: etablissement)
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: _buildButtons(),
-            ),
+          Row(
+            children: _buildButtons(),
           ),
         ],
       ),
@@ -128,7 +128,9 @@ class _EtablissementListState extends State<EtablissementList> {
     return [
       const Spacer(),
       ElevatedButton(
-        child: const Text("Add Etablissement"),
+        style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(), padding: const EdgeInsets.all(15)),
+        child: const Icon(Icons.add),
         onPressed: () => Get.to(const AddEtablissementPage()),
       )
     ];

@@ -1,11 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../../Core/Database/Controllers/users_controller.dart';
-import '../../Core/Database/Models/compte.dart';
 import '../../Core/Shared/pdf_service.dart';
 import '../../Core/Shared/rating_service.dart';
 import '../../Core/Shared/theme_service.dart';
@@ -23,6 +20,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     bool isDark = GetStorage().read('isDarkMode') ?? false;
     return SettingsList(
       platform: DevicePlatform.web,
+      lightTheme: SettingsThemeData(
+          settingsListBackground: Theme.of(context).scaffoldBackgroundColor),
+      darkTheme: SettingsThemeData(
+          settingsListBackground: Theme.of(context).scaffoldBackgroundColor),
       sections: [
         SettingsSection(
           title: const Text('Theme'),

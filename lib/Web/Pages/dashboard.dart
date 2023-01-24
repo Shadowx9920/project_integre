@@ -48,9 +48,16 @@ class _DashBoardState extends State<DashBoard> {
                       } else if (snapshot.hasError) {
                         return const Text('Error');
                       } else {
-                        return const CircularProgressIndicator();
+                        return const Center(child: CircularProgressIndicator());
                       }
                     },
+                  ),
+                ),
+              ),
+              const Center(
+                child: Expanded(
+                  child: Card(
+                    child: Text("data"),
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../Core/Database/Controllers/reunion_controller.dart';
+import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/reunion.dart';
 import '../ControlPages/add_reunion_page.dart';
 import '../ControlPages/modify_reunion_page.dart';
@@ -48,16 +49,33 @@ class _ReunionListState extends State<ReunionList> {
     List<Appointment> meetings = <Appointment>[];
     List<Reunion> reunions = await ReunionController.getReunionFuture();
 
-    for (var r in reunions) {
-      meetings.add(Appointment(
-          id: r.uid,
-          startTime: r.date,
-          endTime: r.date.add(const Duration(hours: 2)),
-          subject: r.subject,
-          // ignore: use_build_context_synchronously
-          color: Theme.of(context).primaryColor,
-          isAllDay: false));
+    if (UsersController.currentUser!.accType == 0) {
+      for (var r in reunions) {
+        meetings.add(Appointment(
+            id: r.uid,
+            startTime: r.date,
+            endTime: r.date.add(const Duration(hours: 2)),
+            subject: r.subject,
+            // ignore: use_build_context_synchronously
+            color: Theme.of(context).primaryColor,
+            isAllDay: false));
+      }
+    } else {
+      for (var r in reunions) {
+        if (UsersController.currentUser!.id == r.profId ||
+            r.participants.contains(UsersController.currentUser!.id)) {
+          meetings.add(Appointment(
+              id: r.uid,
+              startTime: r.date,
+              endTime: r.date.add(const Duration(hours: 2)),
+              subject: r.subject,
+              // ignore: use_build_context_synchronously
+              color: Theme.of(context).primaryColor,
+              isAllDay: false));
+        }
+      }
     }
+
     return meetings;
   }
 
@@ -139,21 +157,22 @@ class _ReunionListState extends State<ReunionList> {
             ),
           ),
           Row(
-            children: _buildButtons(),
+            children: [
+              const Spacer(),
+              if (UsersController.currentUser!.accType != 3 ||
+                  UsersController.currentUser!.accType != 2)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(15)),
+                  child: const Icon(Icons.add),
+                  onPressed: () => Get.to(() => const AddReunionPage()),
+                ),
+            ],
           )
         ],
       ),
     );
-  }
-
-  _buildButtons() {
-    return [
-      const Spacer(),
-      ElevatedButton(
-        onPressed: () => Get.to(() => const AddReunionPage()),
-        child: const Text("Add Reunion"),
-      ),
-    ];
   }
 }
 

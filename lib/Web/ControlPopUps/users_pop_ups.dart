@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:chips_choice/chips_choice.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../Core/Database/Controllers/users_controller.dart';
 import '../../Core/Database/Models/compte.dart';
@@ -125,11 +127,14 @@ class AddUserFromFile extends StatefulWidget {
 
 class _AddUserFromFileState extends State<AddUserFromFile> {
   late DropzoneViewController dropZoneController;
+  bool _startAnimation = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return ElevatedButton(
-      child: const Text("Add User From File"),
+      style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(), padding: const EdgeInsets.all(15)),
+      child: const Icon(Icons.upload),
       onPressed: () => Get.defaultDialog(
         title: "Add User From File",
         content: SizedBox(
@@ -141,56 +146,81 @@ class _AddUserFromFileState extends State<AddUserFromFile> {
               const Spacer(),
               SizedBox(
                 height: size.height * 0.3,
-                child: DropzoneView(
-                  operation: DragOperation.copy,
-                  cursor: CursorType.grab,
-                  onCreated: (DropzoneViewController controller) {
-                    dropZoneController = controller;
-                  },
-                  onDrop: (dynamic value) async {
-                    String fileName =
-                        await dropZoneController.getFilename(value);
-                    if (fileName.endsWith(".xlsx")) {
-                      List<int> bytes =
-                          await dropZoneController.getFileStream(value).last;
-                      Excel excel = Excel.decodeBytes(bytes);
+                child: Stack(
+                  children: [
+                    DottedBorder(
+                      color: Colors.black,
+                      strokeWidth: 2,
+                      dashPattern: const [10, 10],
+                      borderType: BorderType.RRect,
+                      radius: const Radius.circular(20),
+                      child: DropzoneView(
+                        operation: DragOperation.copy,
+                        cursor: CursorType.grab,
+                        onHover: () => setState(() {
+                          _startAnimation = true;
+                        }),
+                        onLeave: () => setState(() {
+                          _startAnimation = false;
+                        }),
+                        onCreated: (DropzoneViewController controller) {
+                          dropZoneController = controller;
+                        },
+                        onDrop: (dynamic value) async {
+                          String fileName =
+                              await dropZoneController.getFilename(value);
+                          if (fileName.endsWith(".xlsx")) {
+                            List<int> bytes = await dropZoneController
+                                .getFileStream(value)
+                                .last;
+                            Excel excel = Excel.decodeBytes(bytes);
 
-                      for (var table in excel.tables.keys) {
-                        for (var row in excel.tables[table]!.rows) {
-                          String? email;
-                          String? password;
-                          for (var cell in row) {
-                            if (cell != null) {
-                              if (cell.value.toString().contains("@")) {
-                                email = cell.value.toString();
-                              } else {
-                                password = cell.value.toString();
+                            for (var table in excel.tables.keys) {
+                              for (var row in excel.tables[table]!.rows) {
+                                String? email;
+                                String? password;
+                                for (var cell in row) {
+                                  if (cell != null) {
+                                    if (cell.value.toString().contains("@")) {
+                                      email = cell.value.toString();
+                                    } else {
+                                      password = cell.value.toString();
+                                    }
+                                  }
+                                }
+                                if (email == null || password == null) {
+                                  continue;
+                                } else {
+                                  UsersController.createAccount(Compte(
+                                    id: Random().nextInt(1000000).toString(),
+                                    name: '',
+                                    email: email,
+                                    password: password,
+                                    accType: 3,
+                                  ));
+                                }
                               }
                             }
-                          }
-                          if (email == null || password == null) {
-                            continue;
                           } else {
-                            UsersController.createAccount(Compte(
-                              id: Random().nextInt(1000000).toString(),
-                              name: '',
-                              email: email,
-                              password: password,
-                              accType: 3,
-                            ));
+                            Get.snackbar(
+                              "Error",
+                              "File must be an excel file",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.red,
+                              colorText: Colors.white,
+                            );
                           }
-                        }
-                      }
-                    } else {
-                      Get.snackbar(
-                        "Error",
-                        "File must be an excel file",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                    }
-                  },
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: Lottie.asset(
+                        'assets/animations/download-file-icon-animation.json',
+                        frameRate: FrameRate.max,
+                        repeat: _startAnimation,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const Spacer(),
